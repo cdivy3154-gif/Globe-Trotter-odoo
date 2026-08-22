@@ -1,3 +1,14 @@
+// ── M3 Theme Toggle ──
+function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    const icon  = document.getElementById('theme-icon');
+    const label = document.getElementById('theme-label');
+    if (icon)  icon.textContent  = isDark ? 'dark_mode'  : 'light_mode';
+    if (label) label.textContent = isDark ? 'Dark Mode'  : 'Light Mode';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const mainContent = document.getElementById('main-content');
     const sidebar = document.getElementById('sidebar');
@@ -48,45 +59,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 link.classList.remove('active');
             }
         });
+    } // <-- closing brace for navigateTo
 
-        // Re-attach event listeners to new content
-        attachRouteListeners();
-    }
-
-    function attachRouteListeners() {
-        document.querySelectorAll('[data-route]').forEach(el => {
-            el.addEventListener('click', (e) => {
-                e.preventDefault();
-                const route = el.dataset.route;
-                navigateTo(route);
-            });
-        });
-
-        // Form submissions (mock)
-        const loginForm = document.getElementById('login-form');
-        if (loginForm) {
-            loginForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                navigateTo('dashboard');
-            });
+    // Event Delegation for routing
+    document.body.addEventListener('click', (e) => {
+        const routeEl = e.target.closest('[data-route]');
+        if (routeEl) {
+            e.preventDefault();
+            navigateTo(routeEl.dataset.route);
         }
+    });
 
-        const registerForm = document.getElementById('register-form');
-        if (registerForm) {
-            registerForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                navigateTo('dashboard');
-            });
+    // Event Delegation for form submissions
+    document.body.addEventListener('submit', (e) => {
+        if (e.target.id === 'login-form' || e.target.id === 'register-form') {
+            e.preventDefault();
+            navigateTo('dashboard');
+        } else if (e.target.id === 'create-trip-form') {
+            e.preventDefault();
+            navigateTo('add-itinerary');
         }
-
-        const createTripForm = document.getElementById('create-trip-form');
-        if (createTripForm) {
-            createTripForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                navigateTo('add-itinerary');
-            });
-        }
-    }
+    });
 
     // Initial navigation
     navigateTo('login');
