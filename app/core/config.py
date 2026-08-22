@@ -15,11 +15,17 @@ class Settings(BaseSettings):
         default="sqlite:///./globetrotter.db",
         description="SQLite database URL",
     )
-    UPLOAD_DIR: str = str(Path.home() / ".globetrotter" / "uploads")
-    MAX_UPLOAD_MB: int = 5
-    ALLOWED_EXTENSIONS: set = {"jpg", "jpeg", "png", "webp"}
-    APP_NAME: str = "GlobeTrotter"
-    APP_VERSION: str = "1.0.0"
+    UPLOAD_DIR: str = Field(
+        default_factory=lambda: str(Path.home() / ".globetrotter" / "uploads"),
+        description="Directory for local image uploads",
+    )
+    MAX_UPLOAD_MB: int = Field(default=5, ge=1)
+    ALLOWED_EXTENSIONS: set[str] = Field(
+        default_factory=lambda: {"jpg", "jpeg", "png", "webp"},
+        description="Allowed file extensions for uploads",
+    )
+    APP_NAME: str = Field(default="GlobeTrotter")
+    APP_VERSION: str = Field(default="1.0.0")
 
 
 settings = Settings()
