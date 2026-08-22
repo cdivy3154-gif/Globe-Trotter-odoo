@@ -1,128 +1,124 @@
 # ═══════════════════════════════════════════════════════════════════
-#   GLOBETROTTER — M3 EXPRESSIVE DESIGN SYSTEM
-#   Primary: Warm Amber-Orange (#D97706 / #8C4A01)
-#   Surface: Deep Slate with warm tint
-#   Typography: Segoe UI Variable → Segoe UI → fallback
+#   GLOBETROTTER — SUNRISE DESIGN SYSTEM
+#   Mode:    Light (warm cream / ivory surfaces)
+#   Primary: Saffron Orange  #E8811A / #D4700F
+#   Accent:  Golden Yellow   #F5A623 / #D4861B
+#   Surface: Warm Ivory + Linen hierarchy
+#   Status:  Standard semantic greens/reds on light bg
 # ═══════════════════════════════════════════════════════════════════
 
-# ── Primary Brand Palette ────────────────────────────────────────
-_ORANGE_50  = "#FFF8F0"
-_ORANGE_100 = "#FFEDD5"
-_ORANGE_200 = "#FED7AA"
-_ORANGE_300 = "#FDBA74"
-_ORANGE_400 = "#FB923C"
-_ORANGE_500 = "#F97316"
-_ORANGE_600 = "#EA580C"
-_ORANGE_700 = "#C2410C"
-_ORANGE_800 = "#9A3412"
-_ORANGE_900 = "#7C2D12"
+# ── Saffron-Orange Brand ─────────────────────────────────────────
+_SAF_50  = "#FFF8EE"
+_SAF_100 = "#FEECD3"
+_SAF_200 = "#FDD4A0"
+_SAF_300 = "#FBB469"
+_SAF_400 = "#F99336"
+_SAF_500 = "#E8811A"       # primary
+_SAF_600 = "#D4700F"       # primary hover
+_SAF_700 = "#B05A09"       # dim / muted brand
+_SAF_800 = "#8C4407"
+_SAF_900 = "#6B3106"
 
-# ── Secondary (Amber, warm accent) ───────────────────────────────
-_AMBER_400  = "#FBBF24"
-_AMBER_500  = "#F59E0B"
-_AMBER_600  = "#D97706"
+# ── Golden Accent ────────────────────────────────────────────────
+_GOLD_300 = "#FCCF6B"
+_GOLD_400 = "#F5A623"      # accent
+_GOLD_500 = "#D4861B"      # accent hover
+_GOLD_600 = "#B36E14"
 
-# ── Surface Palette (Warm Slate) ──────────────────────────────────
-_SLATE_50   = "#F8FAFC"
-_SLATE_100  = "#F1F5F9"
-_SLATE_200  = "#E2E8F0"
-_SLATE_300  = "#CBD5E1"
-_SLATE_400  = "#94A3B8"
-_SLATE_500  = "#64748B"
-_SLATE_600  = "#475569"
-_SLATE_700  = "#334155"
-_SLATE_800  = "#1E293B"
-_SLATE_850  = "#172032"
-_SLATE_900  = "#0F172A"
-_SLATE_950  = "#090E1A"
+# ── Warm Cream / Linen Surface Hierarchy ─────────────────────────
+_CREAM_50  = "#FFFDF9"     # purest white
+_CREAM_100 = "#FDF9F2"     # app background
+_CREAM_200 = "#F8F1E4"     # card background
+_CREAM_300 = "#F0E6D2"     # card hover / sidebar
+_CREAM_400 = "#E5D5B8"     # input background
+_CREAM_500 = "#D4BE96"     # border light
+_CREAM_600 = "#B89E70"     # border
+_CREAM_700 = "#8C7448"     # muted text / border strong
 
-# Warm tint over pure slate
-_WARM_900   = "#120E08"   # near-black warm bg
-_WARM_850   = "#1C160C"   # bg dark
-_WARM_800   = "#241D0F"   # card bg
-_WARM_750   = "#2E2510"   # card hover
-_WARM_700   = "#3D3118"   # sidebar / input bg
-_WARM_600   = "#574721"   # border
-_WARM_500   = "#7A6430"   # border light / muted text area
+# ── Neutral Grey for text ────────────────────────────────────────
+_GREY_900  = "#1A1208"     # primary text (warm near-black)
+_GREY_700  = "#3D2E0F"     # secondary text
+_GREY_600  = "#5E4A25"     # muted text
+_GREY_400  = "#8C7448"     # placeholder / very muted
 
-# ── Semantic Status ───────────────────────────────────────────────
-_GREEN_400  = "#34D399"
-_GREEN_500  = "#10B981"
-_GREEN_900  = "#064E3B"
-_RED_400    = "#F87171"
-_RED_500    = "#EF4444"
+# ── Semantic Colours ─────────────────────────────────────────────
+_GREEN_500  = "#16A34A"
+_GREEN_100  = "#DCFCE7"
+_GREEN_700  = "#15803D"
+_RED_500    = "#DC2626"
+_RED_100    = "#FEE2E2"
 _RED_700    = "#B91C1C"
-_RED_900    = "#7F1D1D"
-_BLUE_400   = "#60A5FA"
-_BLUE_500   = "#3B82F6"
-_SKY_400    = "#38BDF8"
-_TEAL_400   = "#2DD4BF"
-_VIOLET_500 = "#8B5CF6"
+_BLUE_500   = "#2563EB"
+_BLUE_100   = "#DBEAFE"
+_TEAL_500   = "#0D9488"
+_TEAL_100   = "#CCFBF1"
+_VIOLET_500 = "#7C3AED"
+_SKY_500    = "#0284C7"
 
 # ══════════════════════════════════════════════════════════════════
-#   THEME — the single source of truth imported everywhere
+#   THEME — single source of truth imported everywhere
 # ══════════════════════════════════════════════════════════════════
 THEME = {
-    # ── Brand ───────────────────────────────────────────────────
-    "primary":           _ORANGE_600,       # #EA580C  Warm Orange
-    "primary_hover":     _ORANGE_700,       # #C2410C  darker press
-    "primary_dim":       _ORANGE_800,       # #9A3412  muted orange
-    "primary_light":     _ORANGE_100,       # light tint
-    "primary_container": "#2D1606",         # deep orange surface
-    "on_primary":        "#FFFFFF",
-    "on_primary_container": _ORANGE_200,
+    # ── Brand ────────────────────────────────────────────────────
+    "primary":              _SAF_500,           # #E8811A  saffron orange
+    "primary_hover":        _SAF_600,           # #D4700F  darker press
+    "primary_dim":          _SAF_700,           # muted brand
+    "primary_light":        _SAF_100,           # very light tint
+    "primary_container":    _SAF_100,           # container tint (orange chip bg)
+    "on_primary":           "#FFFFFF",
+    "on_primary_container": _SAF_700,
 
-    # ── Amber / Gold Accent ──────────────────────────────────────
-    "accent":            _AMBER_500,        # #F59E0B
-    "accent_hover":      _AMBER_600,        # #D97706
-    "on_accent":         "#1C1400",
+    # ── Golden Accent ─────────────────────────────────────────────
+    "accent":               _GOLD_400,          # #F5A623
+    "accent_hover":         _GOLD_500,          # #D4861B
+    "on_accent":            "#2D1A00",
 
-    # ── Surfaces (warm slate hierarchy) ─────────────────────────
-    "bg_dark":           _WARM_850,         # main app bg
-    "bg_card":           _WARM_800,         # cards
-    "bg_card_hover":     _WARM_750,         # card hover
-    "bg_sidebar":        _WARM_900,         # sidebar
-    "bg_input":          _WARM_700,         # input fields
-    "bg_surface2":       "#1A1408",         # alternate deep surface
+    # ── Surfaces (light warm cream hierarchy) ─────────────────────
+    "bg_dark":              _CREAM_100,         # app root bg  (warm off-white)
+    "bg_card":              _CREAM_50,          # cards / panels (pure ivory)
+    "bg_card_hover":        _CREAM_200,         # card hover
+    "bg_sidebar":           _CREAM_300,         # sidebar (linen)
+    "bg_input":             _CREAM_200,         # input fields
+    "bg_surface2":          _CREAM_400,         # deeper panels
 
-    # ── Borders & Dividers ───────────────────────────────────────
-    "border":            _WARM_600,         # #574721
-    "border_light":      _WARM_500,         # #7A6430
-    "border_focus":      _ORANGE_600,       # orange on focus
+    # ── Borders & Dividers ────────────────────────────────────────
+    "border":               _CREAM_500,         # #D4BE96
+    "border_light":         _CREAM_400,         # subtle
+    "border_focus":         _SAF_500,           # orange ring on focus
 
-    # ── Typography ───────────────────────────────────────────────
-    "text_primary":      "#F8F4EE",         # warm white
-    "text_secondary":    "#C4B99A",         # muted warm
-    "text_muted":        "#8A7D62",         # very muted
-    "text_on_primary":   "#FFFFFF",
-    "text_on_accent":    "#1C1400",
-    "text_link":         _ORANGE_400,
+    # ── Typography ────────────────────────────────────────────────
+    "text_primary":         _GREY_900,          # warm near-black
+    "text_secondary":       _GREY_700,          # #3D2E0F
+    "text_muted":           _GREY_600,          # #5E4A25
+    "text_on_primary":      "#FFFFFF",
+    "text_on_accent":       "#2D1A00",
+    "text_link":            _SAF_600,
 
-    # ── Status / Semantic ────────────────────────────────────────
-    "success":           _GREEN_400,
-    "success_bg":        _GREEN_900,
-    "warning":           _AMBER_400,
-    "warning_bg":        "#451A00",
-    "danger":            _RED_400,
-    "danger_hover":      _RED_500,
-    "danger_bg":         _RED_900,
-    "info":              _SKY_400,
-    "info_bg":           "#0C2D44",
+    # ── Status / Semantic ─────────────────────────────────────────
+    "success":              _GREEN_700,
+    "success_bg":           _GREEN_100,
+    "warning":              _GOLD_500,
+    "warning_bg":           _SAF_100,
+    "danger":               _RED_500,
+    "danger_hover":         _RED_700,
+    "danger_bg":            _RED_100,
+    "info":                 _BLUE_500,
+    "info_bg":              _BLUE_100,
 
-    # ── Chart / Data Vis Colors ──────────────────────────────────
-    "chart_1":           _ORANGE_500,
-    "chart_2":           _AMBER_400,
-    "chart_3":           _GREEN_400,
-    "chart_4":           _SKY_400,
-    "chart_5":           _VIOLET_500,
-    "chart_6":           _TEAL_400,
+    # ── Chart / Data Vis ──────────────────────────────────────────
+    "chart_1":              _SAF_500,
+    "chart_2":              _GOLD_400,
+    "chart_3":              _GREEN_500,
+    "chart_4":              _SKY_500,
+    "chart_5":              _VIOLET_500,
+    "chart_6":              _TEAL_500,
 
-    # ── Trip Status Chips ────────────────────────────────────────
-    "status_upcoming":   _BLUE_400,
-    "status_ongoing":    _GREEN_400,
-    "status_past":       _SLATE_400,
-    "status_public":     _TEAL_400,
-    "status_private":    _WARM_500,
+    # ── Trip Status Chips ─────────────────────────────────────────
+    "status_upcoming":      _BLUE_500,
+    "status_ongoing":       _GREEN_500,
+    "status_past":          _GREY_600,
+    "status_public":        _TEAL_500,
+    "status_private":       _GREY_400,
 }
 
 # ══════════════════════════════════════════════════════════════════
@@ -150,7 +146,7 @@ FONTS = {
     "code":         ("Consolas", 12),
     "mono":         ("Consolas", 11),
 
-    # Icon (Material Symbols not available natively — use emoji fallback)
+    # Icon
     "icon_lg":      (_BASE, 20),
     "icon_md":      (_BASE, 16),
 }
@@ -187,13 +183,13 @@ LAYOUT = {
 }
 
 # ══════════════════════════════════════════════════════════════════
-#   MATPLOTLIB — chart style config (used by budget/admin screens)
+#   MATPLOTLIB — chart style config (light mode)
 # ══════════════════════════════════════════════════════════════════
 MPL_STYLE = {
-    "bg":           _WARM_800,
-    "axes_bg":      _WARM_800,
-    "text":         "#F8F4EE",
-    "muted":        "#8A7D62",
-    "grid":         "#2E2510",
-    "colors":       [_ORANGE_500, _AMBER_400, _GREEN_400, _SKY_400, _VIOLET_500, _TEAL_400, _RED_400],
+    "bg":       _CREAM_50,
+    "axes_bg":  _CREAM_50,
+    "text":     _GREY_900,
+    "muted":    _GREY_600,
+    "grid":     _CREAM_400,
+    "colors":   [_SAF_500, _GOLD_400, _GREEN_500, _SKY_500, _VIOLET_500, _TEAL_500, _RED_500],
 }

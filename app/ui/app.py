@@ -21,7 +21,7 @@ from app.scripts.seed_cities import seed_database
 class GlobeTrotterApp(ctk.CTk):
     def __init__(self):
         super().__init__()
-        ctk.set_appearance_mode("dark")
+        ctk.set_appearance_mode("light")
         ctk.set_default_color_theme("dark-blue")
 
         self.title("GlobeTrotter — Personalized Travel Planning Studio")
