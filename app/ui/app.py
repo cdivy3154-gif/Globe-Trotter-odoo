@@ -114,6 +114,13 @@ class GlobeTrotterApp(ctk.CTk):
 
     def navigate(self, screen_key: str, **kwargs):
         if screen_key in ("logout", "login"):
+            if self.current_user and screen_key == "logout":
+                try:
+                    from app.services.auth_service import AuthService
+                    with self.session_factory() as session:
+                        AuthService(session).logout(self.current_user.id)
+                except Exception:
+                    pass
             self._show_login()
             return
 

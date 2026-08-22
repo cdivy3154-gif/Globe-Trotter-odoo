@@ -153,13 +153,15 @@ class Sidebar(ctk.CTkFrame):
 
         ctk.CTkButton(
             pill,
-            text="Log Out",
+            text="🚪  Log Out",
             font=FONTS["badge"],
             height=28,
-            corner_radius=SHAPE["extra_small"],
+            corner_radius=SHAPE["small"],
             fg_color=THEME["danger_bg"],
             hover_color=THEME["danger"],
-            text_color=THEME["text_primary"],
+            text_color=THEME["danger"],
+            border_width=1,
+            border_color=THEME["danger"],
             command=lambda: self.navigate_callback("logout"),
         ).pack(fill="x", padx=12, pady=(0, 10))
 

@@ -68,6 +68,7 @@ class ProfileScreen(ctk.CTkScrollableFrame):
             self,
             title="My Profile & Account ⚙️",
             subtitle="Manage your personal details, preferences, and account security.",
+            action_button=("🚪  Log Out", lambda: self.navigate_callback("logout"), THEME["danger"]),
             breadcrumb=["Dashboard", "Profile"],
         ).pack(fill="x", padx=20, pady=(18, 10))
 
@@ -116,6 +117,21 @@ class ProfileScreen(ctk.CTkScrollableFrame):
         ctk.CTkLabel(body, text=self.current_user.email, font=FONTS["body_sm"], text_color=THEME["text_secondary"], anchor="w").grid(row=1, column=1, sticky="w")
         role = getattr(self.current_user, "role", "user")
         ctk.CTkLabel(body, text=f"Role: {str(role).title()}", font=FONTS["badge"], fg_color=THEME["primary_container"], text_color=THEME["primary"], corner_radius=SHAPE["full"]).grid(row=2, column=1, sticky="w", pady=(4, 0))
+
+        ctk.CTkButton(
+            body,
+            text="🚪  Log Out",
+            font=FONTS["body_sm"],
+            height=32,
+            width=100,
+            corner_radius=SHAPE["small"],
+            fg_color=THEME["danger_bg"],
+            hover_color=THEME["danger"],
+            text_color=THEME["danger"],
+            border_width=1,
+            border_color=THEME["danger"],
+            command=lambda: self.navigate_callback("logout"),
+        ).grid(row=0, column=2, rowspan=2, sticky="e", padx=(10, 0))
 
         # ── Edit Profile form ─────────────────────────────────────
         form_card = ctk.CTkFrame(self, fg_color=THEME["bg_card"], corner_radius=SHAPE["medium"], border_width=1, border_color=THEME["border"])

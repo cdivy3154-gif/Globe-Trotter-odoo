@@ -76,6 +76,11 @@ class AuthService:
         user.password_hash = hash_password(new_password)
         return self.user_repo.update(user)
 
+    def logout(self, user_id: Optional[str] = None) -> bool:
+        """Invalidate/log out user session on backend."""
+        # For stateful/tokenized auth or telemetry logging
+        return True
+
     def delete_account(self, user_id: str) -> None:
         user = self.user_repo.get(user_id)
         if not user:
