@@ -112,14 +112,14 @@ class AdminScreen(ctk.CTkScrollableFrame):
         ctk.CTkFrame(sec, height=3, fg_color=THEME["accent"], corner_radius=0).pack(fill="x")
         ctk.CTkLabel(sec, text="🏆  Top Destinations by Stop Count", font=FONTS["title_sm"], text_color=THEME["text_primary"]).pack(anchor="w", padx=20, pady=(14, 8))
 
-        max_cnt = max((c.stop_count for c in top_cities), default=1)
+        max_cnt = max((c.trip_count for c in top_cities), default=1)
         bar_area = ctk.CTkFrame(sec, fg_color="transparent")
         bar_area.pack(fill="x", padx=20, pady=(0, 14))
 
         colors = [THEME["chart_1"], THEME["chart_2"], THEME["chart_3"], THEME["chart_4"], THEME["chart_5"]]
         for i, city in enumerate(top_cities[:10]):
             name = f"{city.city_name}, {city.country}" if hasattr(city, "country") else city.city_name
-            _pct_bar(bar_area, float(city.stop_count), float(max_cnt), colors[i % 5], label=name[:22])
+            _pct_bar(bar_area, float(city.trip_count), float(max_cnt), colors[i % 5], label=name[:22])
 
     # ─────────────────────────────────────────────────────────────
     def _build_users_table(self, users: list):
