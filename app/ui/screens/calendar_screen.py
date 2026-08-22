@@ -15,7 +15,7 @@ import calendar as _cal
 import customtkinter as ctk
 from datetime import datetime, date, timezone
 
-from app.ui.theme import THEME, FONTS, SHAPE, LAYOUT
+from app.ui.theme import THEME, FONTS, SHAPE, LAYOUT, format_money
 from app.ui.components.header import Header
 from app.ui.components.cards import EmptyState
 from app.services.trip_service import TripService
@@ -304,8 +304,9 @@ class CalendarScreen(ctk.CTkScrollableFrame):
                     sub = f"⏰ {act.start_time.strftime('%H:%M')} - {act.end_time.strftime('%H:%M')}   •   {act_type.title()}"
                 except Exception:
                     sub = act_type.title()
-                ctk.CTkLabel(info, text=sub, font=FONTS["body_sm"], text_color=THEME["text_secondary"], anchor="w").pack(anchor="w")
-                ctk.CTkLabel(row, text=f"${cost:,.0f}", font=FONTS["badge"], fg_color=THEME["success_bg"], text_color=THEME["success"], corner_radius=SHAPE["extra_small"]).pack(side="right", padx=(0, 12))
+                act_curr = getattr(act, "currency", getattr(self._trip, "currency", "USD"))
+                cost_str = format_money(act.estimated_cost, act_curr, decimals=0)
+                ctk.CTkLabel(row, text=f" {cost_str} ", font=FONTS["badge"], fg_color=THEME["success_bg"], text_color=THEME["success"], corner_radius=SHAPE["extra_small"]).pack(side="right", padx=(0, 12))
 
             ctk.CTkFrame(panel, height=12, fg_color="transparent").pack()
 

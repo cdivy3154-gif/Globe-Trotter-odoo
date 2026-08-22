@@ -193,3 +193,44 @@ MPL_STYLE = {
     "grid":     _CREAM_400,
     "colors":   [_SAF_500, _GOLD_400, _GREEN_500, _SKY_500, _VIOLET_500, _TEAL_500, _RED_500],
 }
+
+# ══════════════════════════════════════════════════════════════════
+#   CURRENCY FORMATTING & SYMBOLS
+# ══════════════════════════════════════════════════════════════════
+CURRENCY_MAP = {
+    "USD": "$",
+    "INR": "₹",
+    "EUR": "€",
+    "GBP": "£",
+    "JPY": "¥",
+    "AUD": "A$",
+    "CAD": "C$",
+}
+
+def get_currency_symbol(curr_code: str | None = None) -> str:
+    """Return symbol (e.g. ₹, $, €) for 3-letter currency code or symbol."""
+    if not curr_code:
+        return "$"
+    code = curr_code.strip().upper()
+    # Check if already a symbol
+    if code in ("$", "₹", "€", "£", "¥", "A$", "C$"):
+        return code
+    # Extract from "INR (₹)" or "USD ($)"
+    for k, v in CURRENCY_MAP.items():
+        if k in code or v in code:
+            return v
+    return CURRENCY_MAP.get(code, "$")
+
+def format_money(amount: float | int | None, curr: str | None = "$", decimals: int = 0) -> str:
+    """Consistently format monetary amounts with the correct currency symbol."""
+    if amount is None:
+        return "—"
+    symbol = get_currency_symbol(curr)
+    try:
+        val = float(amount)
+        if decimals == 0:
+            return f"{symbol}{val:,.0f}"
+        return f"{symbol}{val:,.{decimals}f}"
+    except (ValueError, TypeError):
+        return f"{symbol}0"
+

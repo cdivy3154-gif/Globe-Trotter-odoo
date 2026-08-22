@@ -11,7 +11,7 @@ Features:
   - Navigate → Itinerary Builder CTA
 """
 import customtkinter as ctk
-from app.ui.theme import THEME, FONTS, SHAPE, LAYOUT, MPL_STYLE
+from app.ui.theme import THEME, FONTS, SHAPE, LAYOUT, MPL_STYLE, format_money, get_currency_symbol
 from app.ui.components.header import Header
 from app.ui.components.cards import MetricCard, EmptyState
 from app.services.trip_service import TripService
@@ -106,31 +106,33 @@ class BudgetScreen(ctk.CTkScrollableFrame):
         total_planned = float(data.get("total_budget", 0) or 0)
         total_actual  = float(data.get("total_estimated_cost", 0) or 0)
         over          = total_planned > 0 and total_actual > total_planned
+        curr          = data.get("currency") or getattr(full_trip, "currency", "USD") or "USD"
 
         if over:
+            overage_str = format_money(total_actual - total_planned, curr, decimals=2)
             warn = ctk.CTkFrame(self, fg_color=THEME["danger_bg"], corner_radius=SHAPE["medium"], border_width=1, border_color=THEME["danger"])
             warn.pack(fill="x", padx=20, pady=(0, 10))
-            ctk.CTkLabel(warn, text=f"⚠️  Over Budget by  ${total_actual - total_planned:,.2f}  — review your activities or increase the trip budget.", font=FONTS["body_lg"], text_color=THEME["danger"], wraplength=900, justify="left").pack(padx=20, pady=14, anchor="w")
+            ctk.CTkLabel(warn, text=f"⚠️  Over Budget by  {overage_str}  — review your activities or increase the trip budget.", font=FONTS["body_lg"], text_color=THEME["danger"], wraplength=900, justify="left").pack(padx=20, pady=14, anchor="w")
 
         # ── 4 Metric Cards ────────────────────────────────────────
         remaining = total_planned - total_actual
-        self._metric_row(data, total_planned, total_actual, remaining)
+        self._metric_row(data, total_planned, total_actual, remaining, curr)
 
         # ── Category breakdown ────────────────────────────────────
         categories = data.get("by_category", {}) or {}
         if categories:
-            self._category_section(categories, total_actual)
+            self._category_section(categories, total_actual, curr)
 
         # ── Per-stop table ────────────────────────────────────────
-        self._stop_table(full_trip, total_actual)
+        self._stop_table(full_trip, total_actual, curr)
 
         # ── Day-by-day table ──────────────────────────────────────
         daily = data.get("daily_breakdown", []) or []
         if daily:
-            self._daily_table(daily)
+            self._daily_table(daily, curr)
 
     # ─────────────────────────────────────────────────────────────
-    def _metric_row(self, data, planned, actual, remaining):
+    def _metric_row(self, data, planned, actual, remaining, curr):
         row = ctk.CTkFrame(self, fg_color="transparent")
         row.pack(fill="x", padx=20, pady=(0, 10))
         row.grid_columnconfigure((0, 1, 2, 3), weight=1)
@@ -139,10 +141,10 @@ class BudgetScreen(ctk.CTkScrollableFrame):
         acc_cost  = float(data.get("total_accommodation", 0) or 0)
 
         cards = [
-            ("Trip Budget", f"${planned:,.0f}" if planned else "—", "💼", "Planned allocation", THEME["primary"]),
-            ("Activity Costs", f"${act_cost:,.2f}", "🎟️", "Booked activities", THEME["accent"]),
-            ("Est. Accommodation", f"${acc_cost:,.2f}", "🏨", "Hotel estimate", THEME["info"]),
-            ("Remaining", f"${remaining:,.2f}", "💰", "Budget left" if remaining >= 0 else "Over budget!", THEME["success"] if remaining >= 0 else THEME["danger"]),
+            ("Trip Budget", format_money(planned, curr, decimals=0) if planned else "—", "💼", "Planned allocation", THEME["primary"]),
+            ("Activity Costs", format_money(act_cost, curr, decimals=2), "🎟️", "Booked activities", THEME["accent"]),
+            ("Est. Accommodation", format_money(acc_cost, curr, decimals=2), "🏨", "Hotel estimate", THEME["info"]),
+            ("Remaining", format_money(remaining, curr, decimals=2), "💰", "Budget left" if remaining >= 0 else "Over budget!", THEME["success"] if remaining >= 0 else THEME["danger"]),
         ]
         for i, (title, val, icon, sub, color) in enumerate(cards):
             MetricCard(row, title=title, value=val, icon=icon, subtitle=sub, accent_color=color).grid(
@@ -150,7 +152,7 @@ class BudgetScreen(ctk.CTkScrollableFrame):
             )
 
     # ─────────────────────────────────────────────────────────────
-    def _category_section(self, categories: dict, total: float):
+    def _category_section(self, categories: dict, total: float, curr: str = "USD"):
         section = ctk.CTkFrame(self, fg_color=THEME["bg_card"], corner_radius=SHAPE["medium"], border_width=1, border_color=THEME["border"])
         section.pack(fill="x", padx=20, pady=(0, 10))
         ctk.CTkFrame(section, height=3, fg_color=THEME["accent"], corner_radius=0).pack(fill="x")
@@ -173,7 +175,8 @@ class BudgetScreen(ctk.CTkScrollableFrame):
 
             ctk.CTkLabel(row, text=cat.title(), font=FONTS["body_sm"], text_color=THEME["text_secondary"], width=120, anchor="w").grid(row=0, column=0, sticky="w")
             _pct_bar(row, float(amt), total, color)
-            ctk.CTkLabel(row, text=f"${float(amt):,.2f}  ({pct:.1f}%)", font=FONTS["body_sm"], text_color=THEME["text_primary"], width=130, anchor="e").grid(row=0, column=2, sticky="e")
+            formatted_cat = format_money(amt, curr, decimals=2)
+            ctk.CTkLabel(row, text=f"{formatted_cat}  ({pct:.1f}%)", font=FONTS["body_sm"], text_color=THEME["text_primary"], width=130, anchor="e").grid(row=0, column=2, sticky="e")
 
     def _draw_pie(self, parent, categories: dict):
         try:
@@ -207,7 +210,7 @@ class BudgetScreen(ctk.CTkScrollableFrame):
             pass  # Graceful degradation — bars still render
 
     # ─────────────────────────────────────────────────────────────
-    def _stop_table(self, trip, total_actual: float):
+    def _stop_table(self, trip, total_actual: float, curr: str = "USD"):
         if not trip.stops:
             return
         section = ctk.CTkFrame(self, fg_color=THEME["bg_card"], corner_radius=SHAPE["medium"], border_width=1, border_color=THEME["border"])
@@ -229,12 +232,12 @@ class BudgetScreen(ctk.CTkScrollableFrame):
             bar_frame.grid(row=0, column=1, sticky="ew", padx=8)
             _pct_bar(bar_frame, stop_cost, total_actual or 1, THEME["primary"])
 
-            ctk.CTkLabel(row, text=f"${stop_cost:,.2f}", font=FONTS["body_sm"], text_color=THEME["success"], width=90, anchor="e").grid(row=0, column=2, sticky="e")
+            ctk.CTkLabel(row, text=format_money(stop_cost, curr, decimals=2), font=FONTS["body_sm"], text_color=THEME["success"], width=90, anchor="e").grid(row=0, column=2, sticky="e")
 
         ctk.CTkFrame(section, height=12, fg_color="transparent").pack()
 
     # ─────────────────────────────────────────────────────────────
-    def _daily_table(self, daily: list):
+    def _daily_table(self, daily: list, curr: str = "USD"):
         section = ctk.CTkFrame(self, fg_color=THEME["bg_card"], corner_radius=SHAPE["medium"], border_width=1, border_color=THEME["border"])
         section.pack(fill="x", padx=20, pady=(0, 24))
         ctk.CTkFrame(section, height=3, fg_color=THEME["chart_2"], corner_radius=0).pack(fill="x")
@@ -262,9 +265,9 @@ class BudgetScreen(ctk.CTkScrollableFrame):
             row.grid_columnconfigure((1, 2, 3), weight=1)
 
             ctk.CTkLabel(row, text=date_str, font=FONTS["body_sm"], text_color=THEME["text_secondary"], width=110).grid(row=0, column=0, padx=12, pady=5, sticky="w")
-            ctk.CTkLabel(row, text=f"${acc:,.0f}", font=FONTS["body_sm"], text_color=THEME["text_muted"]).grid(row=0, column=1, padx=12, pady=5, sticky="w")
-            ctk.CTkLabel(row, text=f"${acts:,.0f}", font=FONTS["body_sm"], text_color=THEME["text_muted"]).grid(row=0, column=2, padx=12, pady=5, sticky="w")
-            ctk.CTkLabel(row, text=f"${total:,.0f}", font=FONTS["body_sm"], text_color=THEME["danger"] if over else THEME["success"]).grid(row=0, column=3, padx=12, pady=5, sticky="w")
+            ctk.CTkLabel(row, text=format_money(acc, curr, decimals=0), font=FONTS["body_sm"], text_color=THEME["text_muted"]).grid(row=0, column=1, padx=12, pady=5, sticky="w")
+            ctk.CTkLabel(row, text=format_money(acts, curr, decimals=0), font=FONTS["body_sm"], text_color=THEME["text_muted"]).grid(row=0, column=2, padx=12, pady=5, sticky="w")
+            ctk.CTkLabel(row, text=format_money(total, curr, decimals=0), font=FONTS["body_sm"], text_color=THEME["danger"] if over else THEME["success"]).grid(row=0, column=3, padx=12, pady=5, sticky="w")
 
         ctk.CTkFrame(section, height=12, fg_color="transparent").pack()
 

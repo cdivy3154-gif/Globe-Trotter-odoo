@@ -498,6 +498,13 @@ class CreateTripScreen(ctk.CTkScrollableFrame):
                 except Exception:
                     pass
 
+            raw_curr = getattr(self, "_s2_currency", "USD")
+            curr_code = "USD"
+            for k in ["USD", "INR", "EUR", "GBP", "JPY", "AUD", "CAD"]:
+                if k in raw_curr:
+                    curr_code = k
+                    break
+
             with self.session_factory() as session:
                 ts = TripService(session)
                 cs = CityService(session)
@@ -510,6 +517,7 @@ class CreateTripScreen(ctk.CTkScrollableFrame):
                         start_date=s_dt,
                         end_date=e_dt,
                         total_budget=bud,
+                        currency=curr_code,
                         cover_photo_path=cover_saved,
                     ),
                 )

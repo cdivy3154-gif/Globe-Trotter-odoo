@@ -9,6 +9,7 @@ class TripBase(BaseModel):
     start_date: datetime
     end_date: datetime
     total_budget: Optional[float] = Field(None, ge=0)
+    currency: Optional[str] = Field("USD", min_length=3, max_length=3)
 
 
 class TripCreate(TripBase):
@@ -22,6 +23,7 @@ class TripUpdate(BaseModel):
     end_date: Optional[datetime] = None
     cover_photo_path: Optional[str] = Field(None, max_length=500)
     total_budget: Optional[float] = Field(None, ge=0)
+    currency: Optional[str] = Field(None, min_length=3, max_length=3)
     visibility: Optional[str] = Field(None, pattern="^(private|public)$")
 
 

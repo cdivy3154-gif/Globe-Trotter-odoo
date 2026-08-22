@@ -127,10 +127,10 @@ class ActivitySearchScreen(ctk.CTkScrollableFrame):
             self._city_cb.set("All Cities")
         self._city_cb.grid(row=0, column=0, sticky="ew", padx=(0, 8))
 
-        self._min_e = _mk_entry(top_row, "Min $", str(int(self.cost_min)) if self.cost_min else "")
+        self._min_e = _mk_entry(top_row, "Min Cost", str(int(self.cost_min)) if self.cost_min else "")
         self._min_e.grid(row=0, column=1, sticky="ew", padx=(0, 6))
 
-        self._max_e = _mk_entry(top_row, "Max $", str(int(self.cost_max)) if self.cost_max else "")
+        self._max_e = _mk_entry(top_row, "Max Cost", str(int(self.cost_max)) if self.cost_max else "")
         self._max_e.grid(row=0, column=2, sticky="ew", padx=(0, 8))
 
         ctk.CTkButton(
@@ -403,7 +403,7 @@ class ActivitySearchScreen(ctk.CTkScrollableFrame):
         tcd.grid_columnconfigure((0, 1, 2), weight=1)
 
         ctk.CTkLabel(tcd, text="Category", font=FONTS["body_sm"], text_color=THEME["text_secondary"]).grid(row=0, column=0, sticky="w", padx=(0, 6))
-        ctk.CTkLabel(tcd, text="Avg Cost ($)", font=FONTS["body_sm"], text_color=THEME["text_secondary"]).grid(row=0, column=1, sticky="w", padx=(0, 6))
+        ctk.CTkLabel(tcd, text="Avg Cost", font=FONTS["body_sm"], text_color=THEME["text_secondary"]).grid(row=0, column=1, sticky="w", padx=(0, 6))
         ctk.CTkLabel(tcd, text="Duration (min)", font=FONTS["body_sm"], text_color=THEME["text_secondary"]).grid(row=0, column=2, sticky="w")
 
         type_cb = ctk.CTkComboBox(tcd, values=[t.lower() for t in _TYPES[1:]], height=LAYOUT["input_height"], font=FONTS["body"], fg_color=THEME["bg_input"], border_color=THEME["border"], text_color=THEME["text_primary"])

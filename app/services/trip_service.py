@@ -39,6 +39,7 @@ class TripService:
             start_date=s_date,
             end_date=e_date,
             total_budget=data.total_budget,
+            currency=data.currency or "USD",
             visibility=TripVisibility.PRIVATE,
         )
         return self.trip_repo.create(trip)
@@ -75,6 +76,8 @@ class TripService:
             trip.cover_photo_path = data.cover_photo_path
         if data.total_budget is not None:
             trip.total_budget = data.total_budget
+        if data.currency is not None:
+            trip.currency = data.currency
         if data.visibility is not None:
             trip.visibility = TripVisibility(data.visibility)
 
@@ -289,6 +292,7 @@ class TripService:
             "average_per_day": round(avg_per_day, 2),
             "overbudget_days": overbudget_days,
             "total_budget": trip.total_budget,
+            "currency": getattr(trip, "currency", "USD") or "USD",
             "days_count": total_trip_days,
         }
 

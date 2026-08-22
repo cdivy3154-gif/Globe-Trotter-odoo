@@ -30,6 +30,7 @@ class Trip(Base):
     )
     share_slug: Mapped[str | None] = mapped_column(String(100), unique=True, nullable=True, index=True)
     total_budget: Mapped[float | None] = mapped_column(Float, nullable=True)
+    currency: Mapped[str] = mapped_column(String(3), default="USD", nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(UTC), nullable=False
     )

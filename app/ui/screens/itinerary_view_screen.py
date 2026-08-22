@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from app.ui.theme import THEME, FONTS
+from app.ui.theme import THEME, FONTS, format_money
 from app.ui.components.header import Header
 from app.services.trip_service import TripService
 
@@ -106,7 +106,7 @@ class ItineraryViewScreen(ctk.CTkScrollableFrame):
                     t_str = f"⏰ {act.start_time.strftime('%H:%M')} - {act.end_time.strftime('%H:%M')}"
                     ctk.CTkLabel(a_row, text=f"{t_str}  •  {act.name}", font=FONTS["body_lg"], text_color=THEME["text_primary"]).pack(side="left")
 
-                    cost_str = f"💰 ${float(act.estimated_cost or 0):,.2f}"
+                    cost_str = f"💰 {format_money(act.estimated_cost, getattr(act, 'currency', getattr(trip, 'currency', 'USD')), decimals=2)}"
                     ctk.CTkLabel(a_row, text=cost_str, font=FONTS["body_sm"], text_color=THEME["success"]).pack(side="right")
 
                 ctk.CTkFrame(day_card, height=6, fg_color="transparent").pack()
@@ -140,7 +140,11 @@ class ItineraryViewScreen(ctk.CTkScrollableFrame):
                 for a in stop.activities:
                     r = ctk.CTkFrame(act_container, fg_color="transparent")
                     r.pack(fill="x", padx=10, pady=4)
-                    ctk.CTkLabel(r, text=f"🎟️ {a.name} ({a.activity_type.upper()})", font=FONTS["body"], text_color=THEME["text_primary"]).pack(side="left")
-                    ctk.CTkLabel(r, text=f"${float(a.estimated_cost or 0):,.2f}", font=FONTS["body_sm"], text_color=THEME["success"]).pack(side="right")
+                    act_type_str = str(getattr(a, "activity_type", "OTHER") or "OTHER")
+                    if hasattr(a.activity_type, "value"):
+                        act_type_str = a.activity_type.value
+                    ctk.CTkLabel(r, text=f"🎟️ {a.name} ({act_type_str.upper()})", font=FONTS["body"], text_color=THEME["text_primary"]).pack(side="left")
+                    a_cost_str = format_money(a.estimated_cost, getattr(a, 'currency', getattr(trip, 'currency', 'USD')), decimals=2)
+                    ctk.CTkLabel(r, text=a_cost_str, font=FONTS["body_sm"], text_color=THEME["success"]).pack(side="right")
             else:
                 ctk.CTkLabel(c_card, text="No activities planned in this city yet.", font=FONTS["body_sm"], text_color=THEME["text_muted"]).pack(padx=16, pady=(0, 12), anchor="w")

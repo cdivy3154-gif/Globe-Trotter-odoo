@@ -4,7 +4,7 @@ MetricCard, TripCard, CityCard, ActivityCatalogCard, EmptyState
 """
 import customtkinter as ctk
 from datetime import datetime, timezone
-from app.ui.theme import THEME, FONTS, LAYOUT, SHAPE
+from app.ui.theme import THEME, FONTS, LAYOUT, SHAPE, format_money, get_currency_symbol
 
 
 # ── Utility ───────────────────────────────────────────────────────
@@ -134,7 +134,9 @@ class TripCard(ctk.CTkFrame):
         ctk.CTkLabel(self, text=f"📍 {stops} Destinations   ·   🎟️ {acts} Activities", font=FONTS["body_sm"], text_color=THEME["text_muted"], anchor="w").pack(fill="x", padx=16, pady=1)
 
         if self.trip.total_budget:
-            ctk.CTkLabel(self, text=f"💰  Budget: ${float(self.trip.total_budget):,.2f}", font=FONTS["body_sm"], text_color=THEME["success"], anchor="w").pack(fill="x", padx=16, pady=1)
+            curr_str = getattr(self.trip, "currency", "USD")
+            formatted_budget = format_money(self.trip.total_budget, curr_str, decimals=0)
+            ctk.CTkLabel(self, text=f"💰  Budget: {formatted_budget}", font=FONTS["body_sm"], text_color=THEME["success"], anchor="w").pack(fill="x", padx=16, pady=1)
 
         # ── Divider ────────────────────────────────────────────────
         ctk.CTkFrame(self, height=1, fg_color=THEME["border"]).pack(fill="x", padx=16, pady=(8, 0))
@@ -280,7 +282,8 @@ class ActivityCatalogCard(ctk.CTkFrame):
 
         ctk.CTkLabel(chips, text=f" {act_type.title()} ", font=FONTS["badge"], fg_color=THEME["primary_container"], text_color=THEME["on_primary_container"], corner_radius=SHAPE["extra_small"]).pack(side="left", padx=(0, 4))
         if avg_cost > 0:
-            ctk.CTkLabel(chips, text=f" ${avg_cost:.0f} ", font=FONTS["badge"], fg_color=THEME["success_bg"], text_color=THEME["success"], corner_radius=SHAPE["extra_small"]).pack(side="left", padx=2)
+            cost_str = format_money(avg_cost, getattr(self.activity, "currency", "USD"), decimals=0)
+            ctk.CTkLabel(chips, text=f" {cost_str} ", font=FONTS["badge"], fg_color=THEME["success_bg"], text_color=THEME["success"], corner_radius=SHAPE["extra_small"]).pack(side="left", padx=2)
         if duration > 0:
             hrs = duration // 60
             mins = duration % 60

@@ -9,7 +9,7 @@ Rich landing hub:
 """
 import customtkinter as ctk
 from datetime import datetime, timezone
-from app.ui.theme import THEME, FONTS, SHAPE, LAYOUT
+from app.ui.theme import THEME, FONTS, SHAPE, LAYOUT, format_money, get_currency_symbol
 from app.ui.components.header import Header
 from app.ui.components.cards import MetricCard, TripCard, CityCard, EmptyState
 from app.services.trip_service import TripService
@@ -158,16 +158,17 @@ class DashboardScreen(ctk.CTkScrollableFrame):
     # ─────────────────────────────────────────────────────────────
     # METRICS ROW
     # ─────────────────────────────────────────────────────────────
-    def _metrics(self, trips: int, days: int, saved: int, budget: float):
+    def _metrics(self, trips: int, days: int, saved: int, budget: float, curr: str = "USD"):
         row = ctk.CTkFrame(self, fg_color="transparent")
         row.pack(fill="x", padx=20, pady=(0, 8))
         row.grid_columnconfigure((0, 1, 2, 3), weight=1)
 
+        budget_formatted = format_money(budget, curr, decimals=0)
         cards_data = [
             ("My Trips",      str(trips),             "✈️",  "Active & Planned",    THEME["primary"]),
             ("Planned Days",  str(days),               "🗓️", "Total Duration",       THEME["accent"]),
             ("Saved Places",  str(saved),              "⭐",  "Bookmarked Cities",   THEME["success"]),
-            ("Total Budget",  f"${budget:,.0f}",       "💰",  "Allocated",           THEME["info"]),
+            ("Total Budget",  budget_formatted,        "💰",  "Allocated",           THEME["info"]),
         ]
 
         for i, (title, value, icon, subtitle, color) in enumerate(cards_data):

@@ -21,7 +21,7 @@ from datetime import datetime, UTC
 from tkinter import messagebox
 from tkcalendar import DateEntry
 
-from app.ui.theme import THEME, FONTS, SHAPE, LAYOUT
+from app.ui.theme import THEME, FONTS, SHAPE, LAYOUT, format_money, get_currency_symbol
 from app.ui.components.header import Header
 from app.ui.components.cards import EmptyState
 from app.services.trip_service import TripService
@@ -167,7 +167,8 @@ class ItineraryBuilderScreen(ctk.CTkScrollableFrame):
         total_acts = sum(len(st.activities) for st in trip.stops)
         meta = f"📅 {s}  →  {e}   •   📍 {stops} Destinations   •   🎟️ {total_acts} Activities"
         if trip.total_budget:
-            meta += f"   •   💰 Budget: ${float(trip.total_budget):,.0f}"
+            curr = getattr(trip, "currency", "USD")
+            meta += f"   •   💰 Budget: {format_money(trip.total_budget, curr, decimals=0)}"
 
         ctk.CTkLabel(banner, text=meta, font=FONTS["body_sm"], text_color=THEME["text_secondary"], anchor="w").pack(fill="x", padx=20, pady=(0, 14))
 
@@ -269,9 +270,10 @@ class ItineraryBuilderScreen(ctk.CTkScrollableFrame):
                 stop_cost += float(act.estimated_cost or 0)
 
             # Stop subtotal
+            curr = getattr(trip, "currency", "USD")
             sub = ctk.CTkFrame(act_panel, fg_color="transparent")
             sub.pack(fill="x", padx=12, pady=(4, 10))
-            ctk.CTkLabel(sub, text=f"Stop Subtotal: ${stop_cost:,.2f}", font=FONTS["body_lg"], text_color=THEME["success"]).pack(side="right")
+            ctk.CTkLabel(sub, text=f"Stop Subtotal: {format_money(stop_cost, curr, decimals=2)}", font=FONTS["body_lg"], text_color=THEME["success"]).pack(side="right")
 
     # ─────────────────────────────────────────────────────────────
     # ACTIVITY ROW
@@ -292,18 +294,20 @@ class ItineraryBuilderScreen(ctk.CTkScrollableFrame):
 
         ctk.CTkLabel(info, text=act.name, font=FONTS["body_lg"], text_color=THEME["text_primary"], anchor="w").pack(anchor="w")
 
+        act_curr = getattr(act, "currency", "USD") or "USD"
+        cost_formatted = format_money(act.estimated_cost, act_curr, decimals=2)
         try:
             t1 = act.start_time.strftime("%b %d, %H:%M")
             t2 = act.end_time.strftime("%H:%M")
-            cost = float(act.estimated_cost or 0)
-            sub = f"⏰ {t1} - {t2}   •   {act_type.title()}   •   ${cost:,.2f}"
+            sub = f"⏰ {t1} - {t2}   •   {act_type.title()}   •   {cost_formatted}"
         except Exception:
             sub = act_type.title()
 
         ctk.CTkLabel(info, text=sub, font=FONTS["body_sm"], text_color=THEME["text_secondary"], anchor="w").pack(anchor="w")
 
         # Cost chip
-        ctk.CTkLabel(row, text=f" ${float(act.estimated_cost or 0):,.0f} ", font=FONTS["badge"], fg_color=THEME["success_bg"], text_color=THEME["success"], corner_radius=SHAPE["extra_small"]).pack(side="right", padx=(0, 6))
+        chip_cost = format_money(act.estimated_cost, act_curr, decimals=0)
+        ctk.CTkLabel(row, text=f" {chip_cost} ", font=FONTS["badge"], fg_color=THEME["success_bg"], text_color=THEME["success"], corner_radius=SHAPE["extra_small"]).pack(side="right", padx=(0, 6))
 
         ctk.CTkButton(row, text="✕", width=28, height=28, font=FONTS["badge"], fg_color="transparent", hover_color=THEME["danger_bg"], text_color=THEME["text_muted"], command=lambda: self._delete_activity(stop_id, act.id)).pack(side="right", padx=4)
 
@@ -317,6 +321,7 @@ class ItineraryBuilderScreen(ctk.CTkScrollableFrame):
         )
         budget = float(trip.total_budget or 0)
         over   = budget > 0 and total_cost > budget
+        curr   = getattr(trip, "currency", "USD")
 
         bar = ctk.CTkFrame(
             self,
@@ -330,13 +335,15 @@ class ItineraryBuilderScreen(ctk.CTkScrollableFrame):
         inner = ctk.CTkFrame(bar, fg_color="transparent")
         inner.pack(fill="x", padx=20, pady=14)
 
-        ctk.CTkLabel(inner, text=f"Total Estimated Cost:  ${total_cost:,.2f}", font=FONTS["title_sm"], text_color=THEME["danger"] if over else THEME["success"]).pack(side="left")
+        ctk.CTkLabel(inner, text=f"Total Estimated Cost:  {format_money(total_cost, curr, decimals=2)}", font=FONTS["title_sm"], text_color=THEME["danger"] if over else THEME["success"]).pack(side="left")
 
         if budget > 0:
             remaining = budget - total_cost
             sign = "-" if remaining < 0 else "+"
             color = THEME["danger"] if remaining < 0 else THEME["success"]
-            ctk.CTkLabel(inner, text=f"Budget: ${budget:,.0f}   |   Remaining: {sign}${abs(remaining):,.2f}", font=FONTS["body"], text_color=color).pack(side="right")
+            rem_str = format_money(abs(remaining), curr, decimals=2)
+            bud_str = format_money(budget, curr, decimals=0)
+            ctk.CTkLabel(inner, text=f"Budget: {bud_str}   |   Remaining: {sign}{rem_str}", font=FONTS["body"], text_color=color).pack(side="right")
 
         if over:
             ctk.CTkLabel(bar, text="⚠️  Over budget! Review your activities or increase your budget allocation.", font=FONTS["body_sm"], text_color=THEME["warning"]).pack(fill="x", padx=20, pady=(0, 10), anchor="w")

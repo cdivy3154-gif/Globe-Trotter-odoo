@@ -15,7 +15,7 @@ from datetime import datetime, timezone, UTC
 from tkinter import messagebox
 from tkcalendar import DateEntry
 
-from app.ui.theme import THEME, FONTS, SHAPE, LAYOUT
+from app.ui.theme import THEME, FONTS, SHAPE, LAYOUT, format_money, get_currency_symbol, CURRENCY_MAP
 from app.ui.components.header import Header
 from app.ui.components.cards import TripCard, EmptyState
 from app.services.trip_service import TripService
@@ -304,8 +304,27 @@ class MyTripsScreen(ctk.CTkScrollableFrame):
         e_cal.set_date(trip.end_date.date() if hasattr(trip.end_date, "date") else trip.end_date)
         e_cal.pack(fill="x", pady=(4, 0))
 
-        lbl("Budget (USD $)")
-        budget_e = entry(val=str(int(float(trip.total_budget or 0))) if trip.total_budget else "")
+        # Budget + Currency row
+        b_row = ctk.CTkFrame(win, fg_color="transparent")
+        b_row.pack(fill="x", padx=24, pady=(8, 4))
+        b_row.grid_columnconfigure((0, 1), weight=1)
+
+        trip_curr_code = getattr(trip, "currency", "USD") or "USD"
+        trip_sym = get_currency_symbol(trip_curr_code)
+
+        ctk.CTkLabel(b_row, text=f"Budget ({trip_sym})", font=FONTS["body_sm"], text_color=THEME["text_secondary"]).grid(row=0, column=0, sticky="w", padx=(0, 8))
+        ctk.CTkLabel(b_row, text="Currency", font=FONTS["body_sm"], text_color=THEME["text_secondary"]).grid(row=0, column=1, sticky="w", padx=(8, 0))
+
+        budget_e = ctk.CTkEntry(b_row, placeholder_text="0", height=LAYOUT["input_height"], font=FONTS["body"], fg_color=THEME["bg_input"], border_color=THEME["border"], border_width=1, corner_radius=SHAPE["small"], text_color=THEME["text_primary"])
+        if trip.total_budget:
+            budget_e.insert(0, str(int(float(trip.total_budget))))
+        budget_e.grid(row=1, column=0, sticky="ew", padx=(0, 8), pady=(4, 0))
+
+        curr_options = [f"{k} ({v})" for k, v in CURRENCY_MAP.items()]
+        curr_cb = ctk.CTkComboBox(b_row, values=curr_options, height=LAYOUT["input_height"], font=FONTS["body"], fg_color=THEME["bg_input"], border_color=THEME["border"], text_color=THEME["text_primary"])
+        current_opt = next((opt for opt in curr_options if trip_curr_code in opt), curr_options[0])
+        curr_cb.set(current_opt)
+        curr_cb.grid(row=1, column=1, sticky="ew", padx=(8, 0), pady=(4, 0))
 
         lbl("Visibility")
         current_vis = "Public 🌐" if _is_public(trip) else "Private 🔒"
@@ -342,6 +361,13 @@ class MyTripsScreen(ctk.CTkScrollableFrame):
                 bud_val = float(bud_str) if bud_str else None
                 vis_val = "public" if "Public" in vis_seg.get() else "private"
 
+                chosen_curr = curr_cb.get()
+                chosen_curr_code = "USD"
+                for k in CURRENCY_MAP.keys():
+                    if k in chosen_curr:
+                        chosen_curr_code = k
+                        break
+
                 with self.session_factory() as session:
                     TripService(session).update_trip(
                         trip.id,
@@ -352,6 +378,7 @@ class MyTripsScreen(ctk.CTkScrollableFrame):
                             start_date=s_dt,
                             end_date=e_dt,
                             total_budget=bud_val,
+                            currency=chosen_curr_code,
                             visibility=vis_val,
                         ),
                     )
