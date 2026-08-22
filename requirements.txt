@@ -1,0 +1,16 @@
+# Database & Core
+sqlalchemy>=2.0.0
+pydantic>=2.6.0
+pydantic-settings>=2.2.0
+email-validator>=2.1.0
+
+# Desktop GUI
+customtkinter>=5.2.0
+Pillow>=10.0.0
+matplotlib>=3.8.0
+
+# Security & Password Hashing
+argon2-cffi>=23.1.0
+
+# Testing
+pytest>=8.0.0
