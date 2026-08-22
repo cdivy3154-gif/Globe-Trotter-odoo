@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Globe Trotter</title>
+    <meta name="description" content="Empowering Personalized Travel Planning">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Sidebar Navigation -->
+        <nav id="sidebar" class="hidden">
+            <div class="logo">
+                <span class="icon">🌍</span>
+                <h1>Globe Trotter</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" data-route="dashboard" class="active">Dashboard</a></li>
+                <li><a href="#" data-route="my-trips">My Trips</a></li>
+                <li><a href="#" data-route="create-trip">Create Trip</a></li>
+                <li><a href="#" data-route="search">Search</a></li>
+                <li><a href="#" data-route="community">Community</a></li>
+            </ul>
+            <div class="nav-footer">
+                <a href="#" data-route="profile" class="profile-btn">
+                    <img src="https://ui-avatars.com/api/?name=User&background=6366f1&color=fff" alt="Profile" class="avatar">
+                    <span>Profile</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main id="main-content">
+            <!-- Dynamic content injected here -->
+        </main>
+    </div>
+
+    <!-- Templates for Screens -->
+
+    <!-- Screen 1: Login -->
+    <template id="tpl-login">
+        <div class="auth-container">
+            <div class="glass-card auth-card">
+                <div class="logo-large">🌍 Globe Trotter</div>
+                <h2>Welcome Back</h2>
+                <p>Enter your details to access your trips.</p>
+                <form id="login-form" class="auth-form">
+                    <div class="input-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" placeholder="you@example.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Log In</button>
+                    <div class="auth-links">
+                        <a href="#">Forgot Password?</a>
+                        <p>Don't have an account? <a href="#" data-route="register">Sign up</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </template>
+
+    <!-- Screen 2: Registration -->
+    <template id="tpl-register">
+        <div class="auth-container">
+            <div class="glass-card auth-card">
+                <div class="logo-large">🌍 Globe Trotter</div>
+                <h2>Create Account</h2>
+                <p>Start your personalized travel planning.</p>
+                <form id="register-form" class="auth-form">
+                    <div class="row">
+                        <div class="input-group">
+                            <label for="reg-fname">First Name</label>
+                            <input type="text" id="reg-fname" placeholder="John" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="reg-lname">Last Name</label>
+                            <input type="text" id="reg-lname" placeholder="Doe" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-email">Email Address</label>
+                        <input type="email" id="reg-email" placeholder="you@example.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-phone">Phone Number</label>
+                        <input type="tel" id="reg-phone" placeholder="+1 234 567 8900">
+                    </div>
+                    <div class="row">
+                        <div class="input-group">
+                            <label for="reg-city">City</label>
+                            <input type="text" id="reg-city" placeholder="New York">
+                        </div>
+                        <div class="input-group">
+                            <label for="reg-country">Country</label>
+                            <input type="text" id="reg-country" placeholder="USA">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Register Now</button>
+                    <div class="auth-links">
+                        <p>Already have an account? <a href="#" data-route="login">Log in</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </template>
+
+    <!-- Screen 3: Dashboard / Auto Landing Page -->
+    <template id="tpl-dashboard">
+        <div class="dashboard-header">
+            <div class="header-content">
+                <h2>Ready for your next adventure?</h2>
+                <p>Explore destinations and start planning today.</p>
+                <button class="btn btn-secondary mt-4" data-route="create-trip">Plan New Trip</button>
+            </div>
+        </div>
+        
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h3>Top Regional Selections</h3>
+                <div class="filters">
+                    <button class="filter-btn active">Region</button>
+                    <button class="filter-btn">City</button>
+                    <button class="filter-btn">Cost Type</button>
+                </div>
+            </div>
+            <div class="horizontal-scroll">
+                <div class="glass-card location-card">
+                    <div class="img-placeholder" style="background-image: url('https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=400&q=80')"></div>
+                    <h4>Paris, France</h4>
+                    <p>Culture, Food, History</p>
+                </div>
+                <div class="glass-card location-card">
+                    <div class="img-placeholder" style="background-image: url('https://images.unsplash.com/photo-1542051812871-75f56cc9a3a1?auto=format&fit=crop&w=400&q=80')"></div>
+                    <h4>Tokyo, Japan</h4>
+                    <p>Technology, Tradition</p>
+                </div>
+                <div class="glass-card location-card">
+                    <div class="img-placeholder" style="background-image: url('https://images.unsplash.com/photo-1512453979436-5a5338d35fac?auto=format&fit=crop&w=400&q=80')"></div>
+                    <h4>Bali, Indonesia</h4>
+                    <p>Beaches, Relaxation</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h3>Previous Trips</h3>
+            </div>
+            <div class="grid-trips">
+                <div class="glass-card trip-card">
+                    <h4>Summer in Europe</h4>
+                    <p class="date">Jul 12 - Aug 05, 2025</p>
+                    <button class="btn btn-outline btn-sm">View details</button>
+                </div>
+                <div class="glass-card trip-card add-new" data-route="create-trip">
+                    <span class="icon">+</span>
+                    <h4>New Trip</h4>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Screen 4: Create a New Trip -->
+    <template id="tpl-create-trip">
+        <div class="dashboard-header">
+            <div class="header-content">
+                <h2>Plan a New Trip</h2>
+                <p>Start your next adventure by filling out the details.</p>
+            </div>
+        </div>
+        <div class="dashboard-section">
+            <div class="glass-card" style="max-width: 600px; margin: 0 auto;">
+                <form id="create-trip-form">
+                    <div class="input-group">
+                        <label for="trip-name">Trip Name</label>
+                        <input type="text" id="trip-name" placeholder="E.g. Summer in Europe" required>
+                    </div>
+                    <div class="row">
+                        <div class="input-group">
+                            <label for="trip-start">Start Date</label>
+                            <input type="date" id="trip-start" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="trip-end">End Date</label>
+                            <input type="date" id="trip-end" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="trip-desc">Description</label>
+                        <textarea id="trip-desc" placeholder="What is this trip about?" rows="3" style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 8px; padding: 0.75rem 1rem; color: var(--text-color); font-family: inherit; resize: vertical;"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Next: Add Stops & Activities</button>
+                </form>
+            </div>
+        </div>
+    </template>
+
+    <!-- Screen 5: Add Itinerary Screen -->
+    <template id="tpl-add-itinerary">
+        <div class="dashboard-header">
+            <div class="header-content">
+                <h2>Build Itinerary</h2>
+                <p>Add stops, dates, and activities.</p>
+            </div>
+        </div>
+        <div class="dashboard-section row" style="align-items: flex-start;">
+            <!-- Itinerary Builder Left -->
+            <div style="flex: 2;">
+                <div class="glass-card mb-4">
+                    <h3>Day 1: Paris</h3>
+                    <p class="date">Jul 12, 2025</p>
+                    <div style="border-left: 2px dashed var(--glass-border); padding-left: 1rem; margin-top: 1rem;">
+                        <div class="glass-card mb-4" style="padding: 1rem;">
+                            <h4>Eiffel Tower Visit</h4>
+                            <p style="color: var(--text-muted); font-size: 0.9rem;">10:00 AM - 12:00 PM • $30</p>
+                        </div>
+                        <button class="btn btn-outline btn-sm">+ Add Activity</button>
+                    </div>
+                </div>
+                <button class="btn btn-secondary btn-block">+ Add Another Stop</button>
+            </div>
+            
+            <!-- Recommendations Right -->
+            <div class="glass-card" style="flex: 1;">
+                <h3>Suggestions</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Popular in Paris</p>
+                <div class="glass-card mb-4" style="padding: 1rem; background: rgba(255,255,255,0.02);">
+                    <h4>Louvre Museum</h4>
+                    <button class="btn btn-primary btn-sm mt-4">Add to Trip</button>
+                </div>
+                <div class="glass-card mb-4" style="padding: 1rem; background: rgba(255,255,255,0.02);">
+                    <h4>Seine River Cruise</h4>
+                    <button class="btn btn-primary btn-sm mt-4">Add to Trip</button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Screen 6: User Trip Listing -->
+    <template id="tpl-my-trips">
+        <div class="dashboard-header">
+            <div class="header-content">
+                <h2>My Trips</h2>
+                <p>All your past, present, and future adventures.</p>
+                <button class="btn btn-secondary mt-4" data-route="create-trip">+ Plan New Trip</button>
+            </div>
+        </div>
+        <div class="dashboard-section">
+            <h3 class="mb-4">Upcoming Trips</h3>
+            <div class="grid-trips">
+                <div class="glass-card trip-card">
+                    <h4>Summer in Europe</h4>
+                    <p class="date">Jul 12 - Aug 05, 2025</p>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">4 Stops • Paris, Rome, Berlin...</p>
+                    <div class="row">
+                        <button class="btn btn-primary btn-sm" data-route="itinerary">View</button>
+                        <button class="btn btn-outline btn-sm">Edit</button>
+                    </div>
+                </div>
+                <div class="glass-card trip-card">
+                    <h4>Weekend in NYC</h4>
+                    <p class="date">Sep 10 - Sep 13, 2025</p>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">1 Stop • New York</p>
+                    <div class="row">
+                        <button class="btn btn-primary btn-sm" data-route="itinerary">View</button>
+                        <button class="btn btn-outline btn-sm">Edit</button>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="mb-4" style="margin-top: 3rem;">Past Trips</h3>
+            <div class="grid-trips">
+                <div class="glass-card trip-card" style="opacity: 0.7;">
+                    <h4>Bali Retreat</h4>
+                    <p class="date">Jan 05 - Jan 15, 2024</p>
+                    <button class="btn btn-outline btn-sm" data-route="itinerary">View Details</button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Screen 7: User Profile Pages -->
+    <template id="tpl-profile">
+        <div class="dashboard-header">
+            <div class="header-content row" style="align-items: center;">
+                <img src="https://ui-avatars.com/api/?name=John+Doe&background=ec4899&color=fff&size=128" alt="Profile" style="border-radius: 50%; width: 100px; height: 100px;">
+                <div>
+                    <h2>John Doe</h2>
+                    <p>john.doe@example.com • Joined 2024</p>
+                    <button class="btn btn-outline btn-sm mt-4">Edit Profile</button>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-section row">
+            <div class="glass-card" style="flex: 1;">
+                <h3>Preferences</h3>
+                <form class="auth-form" style="margin-top: 1rem;">
+                    <div class="input-group">
+                        <label>Language</label>
+                        <select style="background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); padding: 0.75rem; color: white; border-radius: 8px;">
+                            <option>English</option>
+                            <option>Spanish</option>
+                            <option>French</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Currency</label>
+                        <select style="background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); padding: 0.75rem; color: white; border-radius: 8px;">
+                            <option>USD ($)</option>
+                            <option>EUR (€)</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary btn-block">Save Settings</button>
+                </form>
+            </div>
+            <div class="glass-card" style="flex: 2;">
+                <h3>Saved Destinations</h3>
+                <div class="horizontal-scroll" style="margin-top: 1rem;">
+                    <div class="location-card glass-card" style="min-width: 200px;">
+                        <h4>Kyoto, Japan</h4>
+                    </div>
+                    <div class="location-card glass-card" style="min-width: 200px;">
+                        <h4>London, UK</h4>
+                    </div>
+                </div>
+                <button class="btn btn-outline btn-sm mt-4" style="border-color: #ef4444; color: #ef4444;">Log Out</button>
+            </div>
+        </div>
+    </template>
+
+    <!-- Screen 8: Activity/City Search Page -->
+    <template id="tpl-search">
+        <div class="dashboard-header">
+            <div class="header-content">
+                <h2>Discover</h2>
+                <div class="input-group" style="margin-top: 1rem; max-width: 600px; flex-direction: row; gap: 1rem;">
+                    <input type="text" placeholder="Search for cities, activities, or places..." style="flex: 1;">
+                    <button class="btn btn-primary">Search</button>
+                </div>
+                <div class="filters mt-4">
+                    <button class="filter-btn active">All</button>
+                    <button class="filter-btn">Cities</button>
+                    <button class="filter-btn">Activities</button>
+                    <button class="filter-btn">Hotels</button>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-section">
+            <h3>Search Results</h3>
+            <div class="glass-card mt-4 row" style="align-items: center;">
+                <div class="img-placeholder" style="height: 100px; width: 100px; margin-bottom: 0; background-image: url('https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=200&q=80')"></div>
+                <div style="flex: 1; padding-left: 1rem;">
+                    <h4>Eiffel Tower</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Activity • Paris, France</p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Iconic iron lattice tower on the Champ de Mars.</p>
+                </div>
+                <button class="btn btn-outline btn-sm">Add to Trip</button>
+            </div>
+            <div class="glass-card mt-4 row" style="align-items: center;">
+                <div class="img-placeholder" style="height: 100px; width: 100px; margin-bottom: 0; background-image: url('https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=200&q=80')"></div>
+                <div style="flex: 1; padding-left: 1rem;">
+                    <h4>Louvre Museum</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Activity • Paris, France</p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">World's largest art museum and a historic monument.</p>
+                </div>
+                <button class="btn btn-outline btn-sm">Add to Trip</button>
+            </div>
+        </div>
+    </template>
+
+    <!-- Screen 9: Itinerary View Screen with Budget -->
+    <template id="tpl-itinerary">
+        <div class="dashboard-header" style="background: linear-gradient(135deg, rgba(99,102,241,0.3) 0%, rgba(20,184,166,0.3) 100%);">
+            <div class="header-content row" style="align-items: center; justify-content: space-between;">
+                <div>
+                    <h2>Summer in Europe</h2>
+                    <p>Jul 12 - Aug 05, 2025 • 4 Stops</p>
+                </div>
+                <div class="glass-card" style="padding: 1rem; text-align: right;">
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Estimated Budget</p>
+                    <h3 style="color: var(--accent);">$4,250</h3>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-section row">
+            <div style="flex: 2;">
+                <div class="glass-card mb-4">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3>Day 1: Paris</h3>
+                        <span class="date">Jul 12, 2025</span>
+                    </div>
+                    <div style="border-left: 2px solid var(--primary); padding-left: 1.5rem; margin-top: 1.5rem;">
+                        <div class="mb-4">
+                            <span style="font-size: 0.8rem; color: var(--text-muted); background: rgba(255,255,255,0.1); padding: 0.2rem 0.5rem; border-radius: 4px;">10:00 AM</span>
+                            <h4 style="margin-top: 0.5rem;">Eiffel Tower Visit</h4>
+                            <p style="color: var(--text-muted); font-size: 0.9rem;">Cost: $30</p>
+                        </div>
+                        <div class="mb-4">
+                            <span style="font-size: 0.8rem; color: var(--text-muted); background: rgba(255,255,255,0.1); padding: 0.2rem 0.5rem; border-radius: 4px;">01:00 PM</span>
+                            <h4 style="margin-top: 0.5rem;">Lunch at Le Jules Verne</h4>
+                            <p style="color: var(--text-muted); font-size: 0.9rem;">Cost: $150</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card mb-4">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3>Day 2: Paris -> Rome</h3>
+                        <span class="date">Jul 13, 2025</span>
+                    </div>
+                    <div style="border-left: 2px solid var(--primary); padding-left: 1.5rem; margin-top: 1.5rem;">
+                        <div class="mb-4">
+                            <span style="font-size: 0.8rem; color: var(--text-muted); background: rgba(255,255,255,0.1); padding: 0.2rem 0.5rem; border-radius: 4px;">09:00 AM</span>
+                            <h4 style="margin-top: 0.5rem;">Flight to Rome (FCO)</h4>
+                            <p style="color: var(--text-muted); font-size: 0.9rem;">Cost: $120</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-card" style="flex: 1; align-self: flex-start; position: sticky; top: 2rem;">
+                <h3>Cost Breakdown</h3>
+                <div style="margin-top: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Flights & Transport</span>
+                        <strong>$1,200</strong>
+                    </div>
+                    <div style="height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; margin-bottom: 1.5rem;">
+                        <div style="height: 100%; width: 40%; background: #3b82f6; border-radius: 4px;"></div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Accommodation</span>
+                        <strong>$1,800</strong>
+                    </div>
+                    <div style="height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; margin-bottom: 1.5rem;">
+                        <div style="height: 100%; width: 50%; background: #ec4899; border-radius: 4px;"></div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Activities</span>
+                        <strong>$650</strong>
+                    </div>
+                    <div style="height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; margin-bottom: 1.5rem;">
+                        <div style="height: 100%; width: 20%; background: #10b981; border-radius: 4px;"></div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Food & Misc</span>
+                        <strong>$600</strong>
+                    </div>
+                    <div style="height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; margin-bottom: 1.5rem;">
+                        <div style="height: 100%; width: 18%; background: #f59e0b; border-radius: 4px;"></div>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block mt-4" data-route="calendar">View Calendar</button>
+            </div>
+        </div>
+    </template>
+
+    <!-- Screen 10: Community Hub Screen -->
+    <template id="tpl-community">
+        <div class="dashboard-header">
+            <div class="header-content">
+                <h2>Community Hub</h2>
+                <p>Get inspired by other travelers' itineraries.</p>
+                <div class="filters mt-4">
+                    <button class="filter-btn active">Trending</button>
+                    <button class="filter-btn">Recent</button>
+                    <button class="filter-btn">Europe</button>
+                    <button class="filter-btn">Asia</button>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-section">
+            <div class="glass-card mb-4">
+                <div class="row" style="align-items: center; margin-bottom: 1rem;">
+                    <img src="https://ui-avatars.com/api/?name=Alice&background=14b8a6&color=fff" alt="User" class="avatar">
+                    <div style="flex: 1; margin-left: 1rem;">
+                        <h4 style="margin: 0;">Alice shared a trip: <span style="color: var(--primary);">2 Weeks in Japan</span></h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">2 hours ago</p>
+                    </div>
+                    <button class="btn btn-outline btn-sm">Copy Itinerary</button>
+                </div>
+                <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+                    <p>Highlights: Tokyo, Kyoto, Osaka. Estimated cost: $3,500.</p>
+                </div>
+                <div style="margin-top: 1rem; display: flex; gap: 1rem;">
+                    <button style="background: transparent; border: none; color: var(--text-muted); cursor: pointer;">❤️ 124 Likes</button>
+                    <button style="background: transparent; border: none; color: var(--text-muted); cursor: pointer;">💬 12 Comments</button>
+                </div>
+            </div>
+            
+            <div class="glass-card mb-4">
+                <div class="row" style="align-items: center; margin-bottom: 1rem;">
+                    <img src="https://ui-avatars.com/api/?name=Bob&background=3b82f6&color=fff" alt="User" class="avatar">
+                    <div style="flex: 1; margin-left: 1rem;">
+                        <h4 style="margin: 0;">Bob shared a trip: <span style="color: var(--primary);">Backpacking South America</span></h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">5 hours ago</p>
+                    </div>
+                    <button class="btn btn-outline btn-sm">Copy Itinerary</button>
+                </div>
+                <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+                    <p>Highlights: Cusco, Machu Picchu, Lima. Estimated cost: $1,200.</p>
+                </div>
+                <div style="margin-top: 1rem; display: flex; gap: 1rem;">
+                    <button style="background: transparent; border: none; color: var(--text-muted); cursor: pointer;">❤️ 89 Likes</button>
+                    <button style="background: transparent; border: none; color: var(--text-muted); cursor: pointer;">💬 5 Comments</button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Screen 11: Calendar View Screen -->
+    <template id="tpl-calendar">
+        <div class="dashboard-header">
+            <div class="header-content row" style="align-items: center; justify-content: space-between;">
+                <div>
+                    <h2>Trip Calendar</h2>
+                    <p>Summer in Europe</p>
+                </div>
+                <button class="btn btn-outline btn-sm" data-route="itinerary">Switch to List View</button>
+            </div>
+        </div>
+        <div class="dashboard-section">
+            <div class="glass-card" style="padding: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <button class="btn btn-outline btn-sm">&lt;</button>
+                    <h3 style="margin: 0;">July 2025</h3>
+                    <button class="btn btn-outline btn-sm">&gt;</button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: var(--glass-border); border: 1px solid var(--glass-border);">
+                    <div style="padding: 1rem; text-align: center; background: var(--bg-color); font-weight: bold;">Sun</div>
+                    <div style="padding: 1rem; text-align: center; background: var(--bg-color); font-weight: bold;">Mon</div>
+                    <div style="padding: 1rem; text-align: center; background: var(--bg-color); font-weight: bold;">Tue</div>
+                    <div style="padding: 1rem; text-align: center; background: var(--bg-color); font-weight: bold;">Wed</div>
+                    <div style="padding: 1rem; text-align: center; background: var(--bg-color); font-weight: bold;">Thu</div>
+                    <div style="padding: 1rem; text-align: center; background: var(--bg-color); font-weight: bold;">Fri</div>
+                    <div style="padding: 1rem; text-align: center; background: var(--bg-color); font-weight: bold;">Sat</div>
+                    
+                    <!-- Days (Mock) -->
+                    <!-- Empty -->
+                    <div style="min-height: 100px; padding: 0.5rem; background: var(--bg-color); opacity: 0.5;"></div>
+                    <div style="min-height: 100px; padding: 0.5rem; background: var(--bg-color); opacity: 0.5;"></div>
+                    <!-- 1 to 12 -->
+                    <div style="min-height: 100px; padding: 0.5rem; background: var(--bg-color);">1</div>
+                    <div style="min-height: 100px; padding: 0.5rem; background: var(--bg-color);">2</div>
+                    <div style="min-height: 100px; padding: 0.5rem; background: var(--bg-color);">3</div>
+                    <div style="min-height: 100px; padding: 0.5rem; background: var(--bg-color);">4</div>
+                    <div style="min-height: 100px; padding: 0.5rem; background: var(--bg-color);">5</div>
+                    
+                    <div style="min-height: 100px; padding: 0.5rem; background: var(--bg-color);">6</div>
+                    <div style="min-height: 100px; padding: 0.5rem; background: var(--bg-color);">7</div>
+                    <div style="min-height: 100px; padding: 0.5rem; background: var(--bg-color);">8</div>
+                    <div style="min-height: 100px; padding: 0.5rem; background: var(--bg-color);">9</div>
+                    <div style="min-height: 100px; padding: 0.5rem; background: var(--bg-color);">10</div>
+                    <div style="min-height: 100px; padding: 0.5rem; background: var(--bg-color);">11</div>
+                    <!-- Start of Trip -->
+                    <div style="min-height: 100px; padding: 0.5rem; background: rgba(99,102,241,0.1); border-left: 2px solid var(--primary);">
+                        12
+                        <div style="background: var(--primary); color: white; font-size: 0.7rem; padding: 0.2rem; border-radius: 4px; margin-top: 0.5rem;">Paris</div>
+                    </div>
+                    
+                    <div style="min-height: 100px; padding: 0.5rem; background: rgba(99,102,241,0.1);">
+                        13
+                        <div style="background: var(--secondary); color: white; font-size: 0.7rem; padding: 0.2rem; border-radius: 4px; margin-top: 0.5rem;">Rome</div>
+                    </div>
+                    <div style="min-height: 100px; padding: 0.5rem; background: rgba(99,102,241,0.1);">
+                        14
+                        <div style="background: var(--secondary); color: white; font-size: 0.7rem; padding: 0.2rem; border-radius: 4px; margin-top: 0.5rem;">Rome</div>
+                    </div>
+                    <div style="min-height: 100px; padding: 0.5rem; background: rgba(99,102,241,0.1);">
+                        15
+                        <div style="background: var(--accent); color: white; font-size: 0.7rem; padding: 0.2rem; border-radius: 4px; margin-top: 0.5rem;">Berlin</div>
+                    </div>
+                    <!-- Fill the rest -->
+                    <div style="min-height: 100px; padding: 0.5rem; background: rgba(99,102,241,0.1);">16</div>
+                    <div style="min-height: 100px; padding: 0.5rem; background: rgba(99,102,241,0.1);">17</div>
+                    <div style="min-height: 100px; padding: 0.5rem; background: rgba(99,102,241,0.1);">18</div>
+                    <div style="min-height: 100px; padding: 0.5rem; background: rgba(99,102,241,0.1);">19</div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Screen 12: Admin Panel Screen -->
+    <template id="tpl-admin">
+        <div class="dashboard-header" style="background: linear-gradient(135deg, rgba(239,68,68,0.2) 0%, rgba(245,158,11,0.2) 100%); border-bottom: 1px solid rgba(239,68,68,0.3);">
+            <div class="header-content">
+                <h2>Admin Dashboard</h2>
+                <p>Platform analytics and user management.</p>
+            </div>
+        </div>
+        <div class="dashboard-section row">
+            <div class="glass-card" style="flex: 1; text-align: center;">
+                <h4 style="color: var(--text-muted);">Total Users</h4>
+                <h2 style="font-size: 2.5rem; color: white;">12,450</h2>
+                <p style="color: var(--accent);">+5% this week</p>
+            </div>
+            <div class="glass-card" style="flex: 1; text-align: center;">
+                <h4 style="color: var(--text-muted);">Active Trips</h4>
+                <h2 style="font-size: 2.5rem; color: white;">3,210</h2>
+                <p style="color: var(--accent);">+12% this week</p>
+            </div>
+            <div class="glass-card" style="flex: 1; text-align: center;">
+                <h4 style="color: var(--text-muted);">Revenue (Mock)</h4>
+                <h2 style="font-size: 2.5rem; color: white;">$45.2k</h2>
+                <p style="color: var(--primary);">Premium Subs</p>
+            </div>
+        </div>
+        
+        <div class="dashboard-section">
+            <div class="glass-card">
+                <h3>Recent Users</h3>
+                <table style="width: 100%; text-align: left; margin-top: 1rem; border-collapse: collapse;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--glass-border);">
+                            <th style="padding: 1rem;">Name</th>
+                            <th style="padding: 1rem;">Email</th>
+                            <th style="padding: 1rem;">Status</th>
+                            <th style="padding: 1rem;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <td style="padding: 1rem;">Alice Smith</td>
+                            <td style="padding: 1rem;">alice@example.com</td>
+                            <td style="padding: 1rem;"><span style="background: rgba(16,185,129,0.2); color: #10b981; padding: 0.25rem 0.5rem; border-radius: 4px;">Active</span></td>
+                            <td style="padding: 1rem;"><button class="btn btn-outline btn-sm">Manage</button></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <td style="padding: 1rem;">Bob Johnson</td>
+                            <td style="padding: 1rem;">bob@example.com</td>
+                            <td style="padding: 1rem;"><span style="background: rgba(16,185,129,0.2); color: #10b981; padding: 0.25rem 0.5rem; border-radius: 4px;">Active</span></td>
+                            <td style="padding: 1rem;"><button class="btn btn-outline btn-sm">Manage</button></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 1rem;">Charlie Brown</td>
+                            <td style="padding: 1rem;">charlie@example.com</td>
+                            <td style="padding: 1rem;"><span style="background: rgba(239,68,68,0.2); color: #ef4444; padding: 0.25rem 0.5rem; border-radius: 4px;">Suspended</span></td>
+                            <td style="padding: 1rem;"><button class="btn btn-outline btn-sm">Manage</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </template>
+
+    <!-- Script loading -->
+    <script src="js/app.js"></script>
+</body>
+</html>
