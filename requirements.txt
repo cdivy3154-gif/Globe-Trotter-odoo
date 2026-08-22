@@ -1,16 +1,23 @@
-# Database & Core
-sqlalchemy>=2.0.0
-pydantic>=2.6.0
-pydantic-settings>=2.2.0
-email-validator>=2.1.0
+# GlobeTrotter — Python Desktop App Dependencies
+# Install with: pip install -r requirements.txt
 
-# Desktop GUI
-customtkinter>=5.2.0
-Pillow>=10.0.0
-matplotlib>=3.8.0
+# GUI Framework
+customtkinter==5.2.2
 
-# Security & Password Hashing
-argon2-cffi>=23.1.0
+# Database ORM
+sqlalchemy==2.0.48
 
-# Testing
-pytest>=8.0.0
+# Data Validation / Schemas
+pydantic==2.12.5
+
+# Calendar Date Picker (tkinter extension)
+tkcalendar==1.6.1
+
+# Password Hashing
+bcrypt==5.0.0
+
+# Environment Config
+python-dotenv==1.1.1
+
+# Charts (optional — budget screen degrades gracefully if missing)
+matplotlib==3.10.8

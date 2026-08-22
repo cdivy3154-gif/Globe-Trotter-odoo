@@ -29,9 +29,27 @@ class GlobeTrotterApp(ctk.CTk):
         self.minsize(1100, 720)
         self.configure(fg_color=THEME["bg_dark"])
 
+        # Center window on primary monitor
+        self.update_idletasks()
+        sw = self.winfo_screenwidth()
+        sh = self.winfo_screenheight()
+        x  = (sw - 1360) // 2
+        y  = (sh - 860)  // 2
+        self.geometry(f"1360x860+{x}+{y}")
+
+        # App icon (graceful fallback)
+        try:
+            import os
+            icon_path = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "icon.ico")
+            if os.path.isfile(icon_path):
+                self.iconbitmap(icon_path)
+        except Exception:
+            pass
+
         # Database session factory
         self.session_factory = SessionLocal
         self.current_user = None
+        self.sidebar = None
 
         # Container root
         self.grid_columnconfigure(0, weight=1)
@@ -88,14 +106,25 @@ class GlobeTrotterApp(ctk.CTk):
         self.content_container.grid_columnconfigure(0, weight=1)
         self.content_container.grid_rowconfigure(0, weight=1)
 
+    # Screens that map directly to a sidebar nav pill
+    _SIDEBAR_SCREENS = {
+        "dashboard", "my_trips", "create_trip", "city_search",
+        "activity_search", "budget", "calendar", "share", "profile", "admin",
+    }
+
     def navigate(self, screen_key: str, **kwargs):
-        if screen_key == "logout":
+        if screen_key in ("logout", "login"):
             self._show_login()
             return
 
         # Clear existing active screen in content container
         for widget in self.content_container.winfo_children():
             widget.destroy()
+
+        # Sync sidebar active pill (use parent key for sub-screens)
+        sidebar_key = screen_key if screen_key in self._SIDEBAR_SCREENS else "my_trips"
+        if self.sidebar:
+            self.sidebar.set_active(sidebar_key, notify=False)
 
         screen_widget = None
 

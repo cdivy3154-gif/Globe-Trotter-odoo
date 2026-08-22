@@ -1,90 +1,103 @@
-<<<<<<< HEAD
-# GlobeTrotter — Personalized Travel Planning Studio 🌍✈️
+# GlobeTrotter ✈️ — Personalized Travel Planning Studio
 
-GlobeTrotter is a modern, responsive, and intelligent desktop application for personal and collaborative multi-city travel planning. Built with **CustomTkinter** and **SQLite / SQLAlchemy 2.0**.
-
----
-
-## 🌟 Key Features
-
-1. **Authentication & Profile Management**
-   - User account registration & login with secure Argon2id password hashing.
-   - Quick Demo Login buttons (Alex Traveler & Admin).
-   - Profile settings, language preferences, and password change.
-
-2. **Interactive Dashboard**
-   - Quick overview metrics: Active Trips, Total Planned Days, Bookmarked Places, Total Allocated Budget.
-   - Upcoming itineraries carousel with quick-actions.
-   - Trending destination city highlights with 1-click trip addition.
-
-3. **Trip Management (My Trips & Create Trip)**
-   - Initiate multi-city trips with date bounds, descriptions, total budgets, and cover photos.
-   - Search and filter personal trips with destination counters and live budget trackers.
-
-4. **Interactive Itinerary Builder**
-   - Add, remove, and reorder destination stops (drag / up-down controls).
-   - Assign activities to each city stop with start/end time slots, category tags, and estimated costs.
-   - Real-time expense recalculations.
-
-5. **Day-wise & City-wise Itinerary View**
-   - Toggle between chronological Day-by-Day timeline view and structured City-by-City breakdown.
-
-6. **City & Activity Discovery Directory**
-   - Global city directory with regional filters, cost indices (1-100), and popularity scores.
-   - Bookmark / favorite destination cities.
-   - Rich activity catalog (Sightseeing, Food, Adventure, Culture, Nature, Nightlife, Shopping, Relaxation) with cost and duration filters.
-
-7. **Budget & Financial Intelligence**
-   - Detailed cost breakdown across:
-     - 🏨 Accommodation / Lodging
-     - 🍽️ Food & Dining
-     - 🎟️ Scheduled Activities
-     - 🚗 Transit & Transportation
-   - Daily average cost analysis.
-   - Intelligent overbudget warnings for high-expense days.
-
-8. **Calendar Timeline**
-   - Day-by-day sequence of stops and scheduled activities with start/end timestamps.
-
-9. **Trip Sharing & Cloning**
-   - Generate unique 12-character share slugs for public sharing.
-   - Clone / copy community-shared itineraries directly into your account with 1 click.
-
-10. **Admin Analytics Dashboard**
-    - Platform usage metrics (Total Users, Trips, Cities, Activities).
-    - Top destination cities ranked by bookings.
-    - Top activity categories and registered user directory.
+A full-featured **desktop travel planning app** built with Python + CustomTkinter.
 
 ---
 
-## 🚀 Quickstart Guide
+## Features
 
-### 1. Install Dependencies
+| Module | Screens |
+|--------|---------|
+| **Auth** | Login (2-panel animated) · Sign Up · Reset Password |
+| **Dashboard** | Hero banner · Metrics · Recent trips · Trending cities |
+| **Trip Manager** | My Trips (filter tabs · sort · search) · 3-Step Create Wizard |
+| **Itinerary Builder** | City stops with reorder/delete · Activities with type icons · Live budget bar |
+| **Budget Intelligence** | Pie chart · Category bars · Per-stop costs · Day-by-day table |
+| **Calendar** | Month grid · Trip-range tint · Day-click detail · Horizontal timeline |
+| **City Directory** | Region chips · City cards with save star · Add City modal |
+| **Activity Search** | Type chips · Cost range filter · Add to Trip flow |
+| **Share & Community** | Generate/Revoke share link · Import by slug · Clone trips |
+| **Profile** | Stats · Edit name/language · Change password · Delete account |
+| **Admin** | Platform metrics · Top cities chart · Users table · All trips table |
+
+---
+
+## Tech Stack
+
+- **GUI**: [CustomTkinter](https://github.com/TomSchimansky/CustomTkinter) 5.2.2 (Material 3 Warm Orange theme)
+- **Database**: SQLite via SQLAlchemy 2.0 ORM
+- **Schemas**: Pydantic v2
+- **Charts**: Matplotlib (Agg backend — thread-safe)
+- **Date Pickers**: tkcalendar
+- **Auth**: bcrypt password hashing
+
+---
+
+## Quick Start
+
 ```bash
+# 1. Clone the repo & switch to the desktop branch
+git clone <repo-url>
+cd Globe-Trotter-odoo
+git checkout frontend-v2
+
+# 2. Install dependencies
 pip install -r requirements.txt
+
+# 3. Launch
+python run.py
 ```
 
-### 2. Run the Desktop Application
-```bash
-python main.py
+The database is auto-created and seeded with demo cities on first launch.
+
+---
+
+## Demo Credentials
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | `admin@globetrotter.com` | `admin123` |
+| User | `demo@globetrotter.com` | `demo123` |
+
+---
+
+## Project Structure
+
+```
+Globe-Trotter-odoo/
+├── run.py                      # ← Entry point
+├── requirements.txt
+├── app/
+│   ├── core/                   # DB engine, exceptions
+│   ├── models/                 # SQLAlchemy models
+│   ├── repositories/           # Data access layer
+│   ├── schemas/                # Pydantic schemas
+│   ├── services/               # Business logic
+│   └── ui/
+│       ├── app.py              # Root CTk window + router
+│       ├── theme.py            # M3 Warm Orange design system
+│       ├── components/
+│       │   ├── cards.py        # TripCard, CityCard, MetricCard, EmptyState…
+│       │   ├── header.py       # Page header with breadcrumb + CTA
+│       │   └── sidebar.py      # Fixed nav with active-pill tracking
+│       └── screens/
+│           ├── login_screen.py
+│           ├── dashboard_screen.py
+│           ├── create_trip_screen.py
+│           ├── itinerary_builder_screen.py
+│           ├── my_trips_screen.py
+│           ├── city_search_screen.py
+│           ├── activity_search_screen.py
+│           ├── budget_screen.py
+│           ├── calendar_screen.py
+│           ├── share_screen.py
+│           ├── profile_screen.py
+│           └── admin_screen.py
+└── tests/
 ```
 
-*Note: On first startup, the database `globetrotter.db` is created and auto-populated with sample global cities, curated activities, and demo accounts.*
+---
 
-### Demo Credentials
-- **Traveler User:** `demo@globetrotter.com` / `traveler123`
-- **Admin User:** `admin@globetrotter.com` / `admin123`
-=======
-🌍 GlobeTrotter
-Empowering Personalized Travel Planning
+## Branch
 
-GlobeTrotter is a personalized travel planning application designed to simplify the process of planning and organizing multi-city trips.
-
-The platform aims to provide travelers with a single place to create trips, manage destinations and activities, estimate expenses, visualize their itinerary, and share their travel plans.
-
-🎯 Vision
-
-Our vision is to build an intelligent and user-friendly travel planning platform that makes trip planning simple, interactive, and personalized.
-
-GlobeTrotter will help users move from planning an idea to having a complete, organized travel itinerary.
->>>>>>> 6bc5043a65513819991ed416bb8c277f90883bf4
+All frontend work lives on **`frontend-v2`**. The `backend` branch contains the original API-only backend.
