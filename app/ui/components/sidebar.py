@@ -71,7 +71,8 @@ class Sidebar(ctk.CTkFrame):
         # Admin check
         if self.current_user:
             role = getattr(self.current_user, "role", "")
-            is_admin = str(role).lower() == "admin" or str(getattr(role, "value", "")).lower() == "admin"
+            role_val = getattr(role, "value", str(role))
+            is_admin = "admin" in str(role_val).lower() or "admin" in str(role).lower()
             if is_admin:
                 nav_items.append(("admin", "📊", "Admin Analytics"))
 

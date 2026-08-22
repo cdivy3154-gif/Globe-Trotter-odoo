@@ -57,10 +57,11 @@ class AdminScreen(ctk.CTkScrollableFrame):
         for w in self.winfo_children():
             w.destroy()
 
-        role = str(getattr(self.current_user, "role", "") or "").lower()
-        role_val = getattr(role, "value", role)
+        role = getattr(self.current_user, "role", "")
+        role_val = getattr(role, "value", str(role))
+        is_admin = "admin" in str(role_val).lower() or "admin" in str(role).lower()
 
-        if role not in ("admin", "admin") and role_val != "admin":
+        if not is_admin:
             Header(self, title="Admin Panel 📊", breadcrumb=["Dashboard", "Admin"]).pack(fill="x", padx=20, pady=(18, 10))
             EmptyState(self, icon="🚫", title="Access Denied", message="Admin privileges required to view this page.").pack(fill="x", padx=20, pady=40)
             return

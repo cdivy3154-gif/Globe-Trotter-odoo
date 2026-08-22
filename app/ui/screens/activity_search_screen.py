@@ -15,7 +15,7 @@ from app.ui.components.header import Header
 from app.ui.components.cards import ActivityCatalogCard, EmptyState
 from app.services.city_service import CityService
 from app.services.trip_service import TripService
-from app.schemas.city import ActivitySearchParams, ActivityCatalogCreate
+from app.schemas.city import ActivitySearchParams, ActivityCatalogCreate, CitySearchParams
 from app.schemas.trip import ActivityCreate
 from app.core.exceptions import AppException
 
@@ -77,8 +77,7 @@ class ActivitySearchScreen(ctk.CTkScrollableFrame):
 
         with self.session_factory() as session:
             self.cities, _ = CityService(session).search_cities(
-                ActivitySearchParams.__bases__[0](limit=200) if False else
-                type("P", (), {"limit": 200, "offset": 0})()
+                CitySearchParams(limit=200)
             )
 
         Header(
@@ -360,6 +359,7 @@ class ActivitySearchScreen(ctk.CTkScrollableFrame):
                             start_time=s_dt,
                             end_time=e_dt,
                             estimated_cost=float(activity.avg_cost or 0),
+                            currency=getattr(activity, "currency", "USD"),
                         ),
                     )
                     session.commit()
