@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from app.ui.theme import THEME
+from app.ui.theme import THEME, LAYOUT
 from app.ui.components.sidebar import Sidebar
 from app.ui.screens.login_screen import LoginScreen
 from app.ui.screens.dashboard_screen import DashboardScreen
@@ -22,11 +22,11 @@ class GlobeTrotterApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         ctk.set_appearance_mode("dark")
-        ctk.set_default_color_theme("blue")
+        ctk.set_default_color_theme("dark-blue")
 
         self.title("GlobeTrotter — Personalized Travel Planning Studio")
-        self.geometry("1240x820")
-        self.minsize(1050, 700)
+        self.geometry("1360x860")
+        self.minsize(1100, 720)
         self.configure(fg_color=THEME["bg_dark"])
 
         # Database session factory

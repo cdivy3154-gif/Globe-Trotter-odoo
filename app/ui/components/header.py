@@ -1,53 +1,92 @@
+"""
+Header component — page title bar with optional subtitle, breadcrumb, and action button.
+"""
 import customtkinter as ctk
-from app.ui.theme import THEME, FONTS
+from app.ui.theme import THEME, FONTS, LAYOUT, SHAPE
 
 
 class Header(ctk.CTkFrame):
-    def __init__(self, master, title: str = "Dashboard", subtitle: str = "", action_button=None, **kwargs):
-        super().__init__(master, fg_color="transparent", height=70, **kwargs)
-        self.title_text = title
-        self.subtitle_text = subtitle
-        self.action_button = action_button
-        self._build_ui()
+    """Top-of-screen header with title, subtitle, optional breadcrumb and CTA button."""
 
-    def _build_ui(self):
+    def __init__(
+        self,
+        master,
+        title: str,
+        subtitle: str = "",
+        action_button: tuple | None = None,   # (label, command, color)
+        breadcrumb: list[str] | None = None,  # ["Dashboard", "My Trips"]
+        **kwargs,
+    ):
+        super().__init__(
+            master,
+            fg_color=THEME["bg_card"],
+            corner_radius=SHAPE["medium"],
+            border_width=1,
+            border_color=THEME["border"],
+            **kwargs,
+        )
+
         self.grid_columnconfigure(0, weight=1)
 
-        left_frame = ctk.CTkFrame(self, fg_color="transparent")
-        left_frame.grid(row=0, column=0, sticky="w", padx=0, pady=10)
+        inner = ctk.CTkFrame(self, fg_color="transparent")
+        inner.pack(fill="x", padx=LAYOUT["pad_lg"], pady=(16, 14))
+        inner.grid_columnconfigure(0, weight=1)
 
-        self.title_label = ctk.CTkLabel(
-            left_frame,
-            text=self.title_text,
-            font=FONTS["title_xl"],
+        # ── Breadcrumb ────────────────────────────────────────────
+        if breadcrumb and len(breadcrumb) > 1:
+            bc_frame = ctk.CTkFrame(inner, fg_color="transparent")
+            bc_frame.grid(row=0, column=0, columnspan=2, sticky="w", pady=(0, 4))
+            for i, crumb in enumerate(breadcrumb):
+                ctk.CTkLabel(
+                    bc_frame,
+                    text=crumb,
+                    font=FONTS["caption"],
+                    text_color=THEME["text_muted"] if i < len(breadcrumb) - 1 else THEME["primary"],
+                ).pack(side="left")
+                if i < len(breadcrumb) - 1:
+                    ctk.CTkLabel(
+                        bc_frame, text=" › ", font=FONTS["caption"], text_color=THEME["text_muted"]
+                    ).pack(side="left")
+
+        # ── Title Row ─────────────────────────────────────────────
+        title_row = ctk.CTkFrame(inner, fg_color="transparent")
+        title_row.grid(row=1, column=0, sticky="ew")
+        title_row.grid_columnconfigure(0, weight=1)
+
+        ctk.CTkLabel(
+            title_row,
+            text=title,
+            font=FONTS["title_lg"],
             text_color=THEME["text_primary"],
-        )
-        self.title_label.pack(anchor="w")
+            anchor="w",
+        ).grid(row=0, column=0, sticky="w")
 
-        if self.subtitle_text:
-            self.subtitle_label = ctk.CTkLabel(
-                left_frame,
-                text=self.subtitle_text,
+        # ── Action Button ─────────────────────────────────────────
+        if action_button:
+            lbl, cmd, color = action_button
+            ctk.CTkButton(
+                title_row,
+                text=lbl,
+                font=FONTS["body_lg"],
+                height=LAYOUT["btn_height_sm"],
+                corner_radius=SHAPE["small"],
+                fg_color=color,
+                hover_color=THEME["primary_hover"] if color == THEME["primary"] else THEME["accent_hover"],
+                command=cmd,
+            ).grid(row=0, column=1, sticky="e", padx=(12, 0))
+
+        # ── Subtitle ──────────────────────────────────────────────
+        if subtitle:
+            ctk.CTkLabel(
+                inner,
+                text=subtitle,
                 font=FONTS["body"],
                 text_color=THEME["text_secondary"],
-            )
-            self.subtitle_label.pack(anchor="w")
+                anchor="w",
+                wraplength=700,
+                justify="left",
+            ).grid(row=2, column=0, sticky="w", pady=(4, 0))
 
-        if self.action_button:
-            text, command, color = self.action_button
-            btn = ctk.CTkButton(
-                self,
-                text=text,
-                font=FONTS["body_lg"],
-                fg_color=color or THEME["primary"],
-                hover_color=THEME["primary_hover"],
-                height=38,
-                corner_radius=8,
-                command=command,
-            )
-            btn.grid(row=0, column=1, sticky="e", padx=10, pady=10)
-
-    def set_title(self, title: str, subtitle: str = ""):
-        self.title_label.configure(text=title)
-        if hasattr(self, "subtitle_label") and subtitle:
-            self.subtitle_label.configure(text=subtitle)
+        # ── Accent underline bar ──────────────────────────────────
+        bar = ctk.CTkFrame(self, height=3, fg_color=THEME["primary"], corner_radius=0)
+        bar.pack(fill="x", side="bottom")
