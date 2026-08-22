@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # GlobeTrotter — Personalized Travel Planning Studio 🌍✈️
 
 GlobeTrotter is a modern, responsive, and intelligent desktop application for personal and collaborative multi-city travel planning. Built with **CustomTkinter** and **SQLite / SQLAlchemy 2.0**.
@@ -73,3 +74,17 @@ python main.py
 ### Demo Credentials
 - **Traveler User:** `demo@globetrotter.com` / `traveler123`
 - **Admin User:** `admin@globetrotter.com` / `admin123`
+=======
+🌍 GlobeTrotter
+Empowering Personalized Travel Planning
+
+GlobeTrotter is a personalized travel planning application designed to simplify the process of planning and organizing multi-city trips.
+
+The platform aims to provide travelers with a single place to create trips, manage destinations and activities, estimate expenses, visualize their itinerary, and share their travel plans.
+
+🎯 Vision
+
+Our vision is to build an intelligent and user-friendly travel planning platform that makes trip planning simple, interactive, and personalized.
+
+GlobeTrotter will help users move from planning an idea to having a complete, organized travel itinerary.
+>>>>>>> 6bc5043a65513819991ed416bb8c277f90883bf4
